@@ -1,0 +1,57 @@
+{% extends "base/base.html" %}
+
+{% block css %}
+{% endblock css %}
+
+{% block jshd %}
+{% endblock jshd %}
+
+{% block title %}
+Sign in
+{% endblock title %}
+
+{% block toggle_btn %}
+<button class="navbar-toggler navbar-right" type="button" data-toggle="collapse" data-target="#navExpand" aria-controls="navExpand" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+{% endblock toggle_btn %}
+{% block nav_end %}
+<div class="collapse navbar-collapse justify-content-end" id="navExpand">
+  <ul class="navbar-nav">
+    {% block nav_item_active %}
+    {% endblock nav_item_active %}
+  </ul>
+</div>
+{% endblock nav_end %}
+
+{% block container_main %}
+  <div class="container-center">
+    {% block signup_form %}
+    {% endblock signup_form %}
+  </div>
+{% endblock container_main %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block jsbd %}
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock jsbd %}

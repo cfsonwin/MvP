@@ -1,0 +1,55 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signin.css'%}">
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+{% endblock css %}
+
+{% block jshd %}
+{% endblock jshd %}
+
+{% block title %}
+Sign in
+{% endblock title %}
+
+{% block toggle_btn %}
+<button class="navbar-toggler navbar-right" type="button" data-toggle="collapse" data-target="#navExpand" aria-controls="navExpand" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+{% endblock toggle_btn %}
+{% block nav_end %}
+<div class="collapse navbar-collapse justify-content-end" id="navExpand">
+  <ul class="navbar-nav">
+    {% block nav_item_active %}
+    {% endblock nav_item_active %}
+  </ul>
+</div>
+{% endblock nav_end %}
+
+{% block container_main %}
+  <div class="container-center">
+    {% block signin_form %}
+    {% endblock signin_form %}
+  </div>
+{% endblock container_main %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block jsbd %}
+{% endblock jsbd %}

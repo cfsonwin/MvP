@@ -1,0 +1,38 @@
+{% extends "base/signup_base.html" %}
+
+{% block brandlink %}
+  {% url 'mU_signin' %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own virtual products
+{% endblock brand_small %}
+
+{% block nav_item_active %}
+<li class="nav-item">
+  <a class="nav-link"  href="{% url 'mU_signin' %}">Log in</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'mU_signup' %}">Sign up</a>
+</li>
+{% endblock nav_item_active %}
+
+{% block signup_form %}
+    {% if add_status == 0 %}
+        <div class="container-md py-5 col-md-9">
+            <h3>Tips:</h3>
+              {% for msg in info %}
+              <ul>
+                <li>{{ msg }}</li>
+              </ul>
+              {% endfor %}
+            <a class="btn btn-dark" href="{% url 'mU_signup' %}">Retry</a>
+        </div>
+    {% elif add_status == 1 %}
+        <div class="container-md py-5 col-md-9">
+          <h3>Tips:</h3>
+          <p>{{info}}</p>
+          <a class="btn btn-dark" href="{% url 'mU_signin' %}">Continue</a>
+        </div>
+    {% endif %}
+{% endblock signup_form %}

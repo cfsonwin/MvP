@@ -1,0 +1,73 @@
+{% extends "base/page_base.html" %}
+
+{% block brandlink %}
+  {% url 'mU_index' %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block title %}
+product update
+{% endblock title %}
+
+{% block sidebar %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block navbar-light bg-light sidebar collapse">
+  <div class="sidebar-sticky pt-3 pl-3">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'mU_index'  u_id %}">
+          <span data-feather="home"></span>
+          Dashboard <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'mU_p_show'  u_id %}">
+          <span data-feather="file"></span>
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--
+  <div class="navbar-nav sticky-bottom md-block" id="navbarSupportedHomepage">
+    <ul class="navbar-nav text-white">
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Hi, {{request.session.already_login.u_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  -->
+</nav>
+{% endblock sidebar %}
+
+{% block page_view %}
+{% if update_status == 0 %}
+
+    <div class="container-md py-5 col-md-9">
+      <h3>Tips:</h3>
+      <p>{{info}}</p>
+    <a class="btn btn-dark" href="{% url 'mU_p_edit' p_id %}">Retry</a>
+    </div>
+
+  {% elif update_status == 1 %}
+    <div class="container-md py-5 col-md-9">
+      <h3>Tips:</h3>
+      <p>{{info}}</p>
+      <a class="btn btn-dark" href="{% url 'mU_p_show' %}">Continue</a>
+    </div>
+
+  {% endif %}
+{% endblock page_view %}
+
+{% block signout_model_redirect %}
+  {% url 'mU_signin' %}
+{% endblock signout_model_redirect %}
+

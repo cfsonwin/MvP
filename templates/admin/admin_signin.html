@@ -1,0 +1,40 @@
+{% extends "base/signin_base.html" %}
+
+{% block brandlink %}
+  {% url 'mAD_signin' %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Admin Login
+{% endblock brand_small %}
+
+{% block nav_item_active %}
+<li class="nav-item">
+  <a class="nav-link active"  href="{% url 'mAD_signin' %}">Log in</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'mAD_signup' %}">Sign up</a>
+</li>
+{% endblock nav_item_active %}
+
+{% block signin_form %}
+<form class="form-signin" action="{% url 'mAD_dosignin' %}" method="POST">
+  {% csrf_token%}
+  <h1 class="h3 mb-3 mt-4" style="font-size:1rem">Welcome, Please sign in</h1>
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="inputEmail" required autofocus>
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" class="form-control" name="inputPassword" placeholder="Password" required>
+  {% if status == 0 %}
+  <p style="font-size:0.5rem;color:#d51515;margin-bottom:0.25rem" class="text-center">
+      {{info}}
+  </p>
+  {% endif %}
+  <div class="checkbox mb-3">
+    <label>
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>
+{% endblock signin_form %}

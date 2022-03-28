@@ -1,0 +1,17 @@
+<svg width="483" height="300" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <ellipse fill="#e5e5e5" stroke="#e5e5e5" cx="1" cy="150" id="svg_44" rx="150" ry="150"/>
+  <ellipse fill="#343a40" stroke="#e5e5e5" cx="1" cy="150" id="svg_4" rx="80" ry="80"/>
+  <rect fill="#e5e5e5" stroke="#e5e5e5" x="154" y="83" width="65" height="65" id="svg_10"/>
+  <rect stroke-opacity="0" fill="#e5e5e5" stroke="#cccccc" x="154" y="152" width="65" height="148" id="svg_13"/>
+  <rect fill="#343a40" stroke="#e5e5e5" x="81" y="148" width="70.2" height="4" id="svg_36"/>
+  <path fill="none" stroke="#000000" opacity="NaN" d="m588,51.93548" id="svg_41"/>
+  <text fill="#e5e5e5" stroke="#000000" x="213" y="57.74194" id="svg_46" stroke-width="0" font-size="30" font-family="Noto Sans JP" text-anchor="start" xml:space="preserve" font-weight="normal">Datenverarbeitung</text>
+  <text fill="#e5e5e5" stroke="#000000" stroke-width="0" x="396" y="97.74194" id="svg_47" font-size="30" font-family="Noto Sans JP" text-anchor="start" xml:space="preserve">in der</text>
+  <text fill="#e5e5e5" stroke="#000000" stroke-width="0" x="296" y="135.16129" id="svg_48" font-size="30" font-family="Noto Sans JP" text-anchor="start" xml:space="preserve">Konstruktion</text>
+  <path fill="#e5e5e5" stroke="#e5e5e5" opacity="NaN" d="m223,152.32713l70.6383,-0.42553l-44.25532,44.25532l86.80851,104.25532l-69.78723,0l-43.40426,-40l0,-108.08511z" id="svg_51"/>
+  <rect x="-150" fill="#343a40" stroke="#212529" width="150" height="300" id="svg_52"/>
+ </g>
+
+</svg>

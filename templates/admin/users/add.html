@@ -1,0 +1,115 @@
+{% extends "base/page_base.html" %}
+
+{% block brandlink %}
+  {% url 'mAD_index' %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block title %}
+users_add
+{% endblock title %}
+
+{% block sidebar %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block navbar-light bg-light sidebar collapse">
+  <div class="sidebar-sticky pt-3 pl-3">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'mAD_index' %}">
+          <span data-feather="home"></span>
+          Dashboard <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'mAD_user' %}">
+          <span data-feather="file"></span>
+          Constructors
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'mAD_p_show' %}">
+          <span data-feather="file"></span>
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--
+  <div class="navbar-nav sticky-bottom md-block" id="navbarSupportedHomepage">
+    <ul class="navbar-nav text-white">
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Hi, {{request.session.already_login.u_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  -->
+</nav>
+{% endblock sidebar %}
+
+{% block page_view %}
+<div class="container-md py-5 col-md-9">
+    <form role="form" class="form-horizontal needs-validation" action="{% url 'mAD_insert' %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token%}
+        <div class="form-group">
+            <label for="u_firstname">First Name</label>
+            <input type="text" class="form-control" id="u_firstname" placeholder="entry First Name" name="u_firstname" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="form-group">
+            <label for="u_lastname">Last Name</label>
+            <input type="text" class="form-control" id="u_lastname" placeholder="entry Last Name" name="u_lastname" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="entry email" name="email" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="form-group">
+            <label for="u_pw">Password</label>
+            <input type="password" class="form-control" id="u_pw" placeholder="entry password" name="u_pw" required>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+            </small>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="form-group">
+            <label for="Address">Address</label>
+            <input type="text" class="form-control" id="Address" placeholder="Street Nr." name="Address" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="City">City</label>
+              <input type="text" class="form-control" id="City" placeholder="City" name="City" required>
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="State">State</label>
+              <input type="text" class="form-control" id="State" placeholder="State" name="State" required>
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="Zip">Zip</label>
+              <input type="text" class="form-control" id="Zip" name="Zip" required>
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-dark">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock page_view %}
+
+{% block signout_model_redirect %}
+  {% url 'mAD_signin' %}
+{% endblock signout_model_redirect %}

@@ -1,0 +1,59 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Sidebar.css'%}">
+    <!-- Bootstrap CSS -->
+    {% block css %}
+    {% endblock css %}
+    {% block jshd %}
+    {% endblock jshd %}
+    <style>
+      .mynavbar{
+      padding: 0;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      }
+    </style>
+    <title>MvP | {% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark mynavbar"  role="navigation" >
+      <div class="container-fluid">
+        <div class="navbar-header pl-2 " >
+          <a class="navbar-brand text_bottom" href="{% block brandlink %}{% endblock brandlink %}">
+            <img src="{% static 'image/dik_no_dik.svg'%}" width="53px" height="45px" class="d-inline-block" alt="" >
+            MvP
+            <small class="text-muted" style="font-size:60% ">
+            {% block brand_small %}
+            {% endblock brand_small %}
+            </small>
+          </a>
+        </div>
+        <div class="pr-2">
+          {% block toggle_btn %}
+          {% endblock toggle_btn %}
+        </div>
+
+        {% block nav_end %}
+        {% endblock nav_end %}
+
+      </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      {% block container_main %}
+      {% endblock container_main %}
+    </div>
+    {% block modals %}
+    {% endblock modals %}
+    <script src="{% static 'jquery.slim.min.js'%}"></script>
+    <script src="{% static 'bootstrap.min.js'%}"></script>
+    {% block jsbd %}
+    {% endblock jsbd %}
+  </body>
+</html>

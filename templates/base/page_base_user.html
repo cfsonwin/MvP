@@ -1,0 +1,75 @@
+{% extends "base/base.html" %}
+
+{% block css %}
+{% endblock css %}
+
+{% block jshd %}
+{% endblock jshd %}
+
+{% block brandlink %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+{% endblock brand_small %}
+
+{% block toggle_btn %}
+<button class="navbar-toggler navbar-right" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+{% endblock toggle_btn %}
+
+{% block nav_end %}
+<div class="navbar-nav justify-content-end d-none d-md-block" id="navbarSupportedHomepage">
+  <ul class="navbar-nav text-white">
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+        {% block hi %}{% endblock hi %}
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+      </div>
+    </li>
+  </ul>
+</div>
+{% endblock nav_end %}
+
+{% block container_main %}
+<div class="row">
+  {% block sidebar %}
+  {% endblock sidebar %}
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    {% block page_view %}
+    {% endblock page_view %}
+  </main>
+</div>
+{% endblock container_main %}
+
+{% block modals %}
+<div class="modal fade" id="ConfirmExit" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">
+          <a  style="color:#fff" href="{% block signout_model_redirect %}{% endblock signout_model_redirect %}">
+              Sure
+            </a>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock modals %}
+
+{% block jsbd %}
+{% endblock jsbd %}

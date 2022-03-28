@@ -1,0 +1,5 @@
+.text_bottom {
+    height:45px;
+    display:table-cell;
+    vertical-align:bottom;
+}

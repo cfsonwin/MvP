@@ -1,0 +1,81 @@
+{% extends "base/page_base.html" %}
+
+{% block brandlink %}
+  {% url 'mAD_index' %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block title %}
+product edit
+{% endblock title %}
+
+{% block sidebar %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block navbar-light bg-light sidebar collapse">
+  <div class="sidebar-sticky pt-3 pl-3">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'mAD_index' %}">
+          <span data-feather="home"></span>
+          Dashboard <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'mAD_user' %}">
+          <span data-feather="file"></span>
+          Constructors
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'mAD_p_show' %}">
+          <span data-feather="file"></span>
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+    <!--
+  <div class="navbar-nav sticky-bottom md-block" id="navbarSupportedHomepage">
+    <ul class="navbar-nav text-white">
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Hi, {{request.session.already_login.u_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  -->
+</nav>
+{% endblock sidebar %}
+
+{% block page_view %}
+<div class="container-md py-5 col-md-9">
+    <form role="form" class="form-horizontal needs-validation" action="{% url 'mAD_p_update' edit_product.p_id%}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token%}
+        <div class="form-group">
+            <label for="p_name">Product Name</label>
+            <input type="text" class="form-control" readonly id="p_name" value="{{edit_product.p_name}}" name="p_name" required>
+        </div>
+        <div class="form-group">
+          <label for="p_discription">Example textarea</label>
+          <textarea class="form-control" id="p_discription" name="p_discription"  rows="3">{{edit_product.description}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-dark" data-toggle="modal" data-target="#ConfirmEdit">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock page_view %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block signout_model_redirect %}
+  {% url 'mAD_signin' %}
+{% endblock signout_model_redirect %}
