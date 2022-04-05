@@ -1,7 +1,7 @@
-{% extends "base/page_base.html" %}
+{% extends "base/page_base_user.html" %}
 {% load static %}
 {% block brandlink %}
-  {% url 'mU_index' %}
+  {% url 'mU_index' u_id %}
 {% endblock brandlink %}
 
 {% block brand_small %}
@@ -48,17 +48,58 @@ product view
 {% endblock sidebar %}
 
 {% block page_view %}
-view this product: {{product.p_name}}
-<br/>
-{% for user in owners %}
-owner: {{user.u_name}}
-<br/>
-{% endfor %}
-Manufacturer:<br/>
-{% for info in m_info %}
-{{info}}
-<br/>
-{% endfor %}
+<form>
+<label for="p_name">Product Name: </label>
+<select type="text" class="selectpicker show-tick form-control" id="p_name" data-width="98%" data-first-option="false" title="Choose one exist Manufacturer" required data-live-search="true" name="p_manu">
+  <option selected>{{product.p_name}}</option>
+  {% for product in P_list %}
+    <option>{{product.p_name}}</option>
+  {% endfor %}
+</select>
+<button type="submit" class="btn btn-dark mt-2">
+    Submit
+</button>
+</form>
+
+<h3>Constructor Name</h3>
+<table class="table table-bordered table-striped table-sm" id="u_name" >
+  <thead>
+    <tr style="font-size:.5rem">
+      <th>Name</th>
+      <th>Contact</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for name,email in user_dic.items %}
+    <tr class="text-center" style="font-size:.75rem">
+      <td>{{ name }}</td>
+      <td>{{ email }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<label for="p_manu">Manufacturers</label>
+<table class="table table-bordered table-striped table-sm" id="p_manu">
+  <thead>
+    <tr style="font-size:.5rem">
+      <th>Name</th>
+      <th>Info</th>
+      <th>Add Time</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for key,Manu in loc_dic.items %}
+    <tr class="text-center" style="font-size:.75rem">
+      <td>{{ Manu.name }}</td>
+      <td>{{ Manu.parent_info }}</td>
+      <td>{{ Manu.addtime }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
 <div class="container-fluid my-3">
     {{ map|safe }}
 </div>

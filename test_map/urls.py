@@ -1,4 +1,4 @@
-"""MyProduct URL Configuration
+"""myboot URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path
+
+from .views import
 
 urlpatterns = [
-    path('admin/', include('Admin.urls')),
-    path('test/', include('test_map.urls')),
-    path('', include('User.urls')),
+    # homepage
+    path('', ad_index.index, name='mAD_index'),
+
+
 ]

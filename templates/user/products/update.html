@@ -1,7 +1,7 @@
-{% extends "base/page_base.html" %}
+{% extends "base/page_base_user.html" %}
 
 {% block brandlink %}
-  {% url 'mU_index' %}
+  {% url 'mU_index' u_id %}
 {% endblock brandlink %}
 
 {% block brand_small %}
@@ -54,14 +54,14 @@ product update
     <div class="container-md py-5 col-md-9">
       <h3>Tips:</h3>
       <p>{{info}}</p>
-    <a class="btn btn-dark" href="{% url 'mU_p_edit' p_id %}">Retry</a>
+    <a class="btn btn-dark" href="{% url 'mU_p_edit' u_id p_id %}">Retry</a>
     </div>
 
   {% elif update_status == 1 %}
     <div class="container-md py-5 col-md-9">
       <h3>Tips:</h3>
       <p>{{info}}</p>
-      <a class="btn btn-dark" href="{% url 'mU_p_show' %}">Continue</a>
+      <a class="btn btn-dark" href="{% url 'mU_p_show' u_id %}">Continue</a>
     </div>
 
   {% endif %}

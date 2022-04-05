@@ -2,7 +2,7 @@ import hashlib
 import random
 from datetime import datetime
 
-from django.contrib.gis.geoip2 import GeoIP2
+# from django.contrib.gis.geoip2 import GeoIP2
 
 
 def pw_hash(pw):
@@ -22,12 +22,12 @@ def pw_hash_salt(pw, salt):
     return md5.hexdigest()
 
 
-def get_geo(ip):
-    g = GeoIP2()
-    country = g.country(ip)
-    city = g.city(ip)
-    lat, lon = g.lat_lon(ip)
-    return country, city, lat, lon
+#def get_geo(ip):
+#    g = GeoIP2()
+#    country = g.country(ip)
+#    city = g.city(ip)
+#    lat, lon = g.lat_lon(ip)
+#    return country, city, lat, lon
 
 
 def get_center_coor(lat1=None, lon1=None, lat2=None, lon2=None):
@@ -47,7 +47,7 @@ def get_zoom(distance):
 
 
 class Manus:
-    def __init__(self, name, loc, addtime, modify_time, description):
+    def __init__(self, name, loc, addtime, modify_time, description, parent_info):
         self.name = name
         self.lat = loc.split(',')[0]
         self.lon = loc.split(',')[1]
@@ -60,6 +60,7 @@ class Manus:
             self.change_st = 1
             self.change_msg = self.get_time_diff()
         self.description = description
+        self.parent_info = parent_info
 
     def get_time_diff(self):
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

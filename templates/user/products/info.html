@@ -1,7 +1,7 @@
-{% extends "base/page_base.html" %}
+{% extends "base/page_base_user.html" %}
 
 {% block brandlink %}
-  {% url 'mU_index' %}
+  {% url 'mU_index' u_id %}
 {% endblock brandlink %}
 
 {% block brand_small %}
