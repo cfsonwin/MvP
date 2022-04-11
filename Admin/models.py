@@ -18,9 +18,9 @@ class Administrator(models.Model):
                 'u_name': str(self.u_name).split('/')[0],
                 'Email': self.Email,
                 }
+
     class Meta:
         db_table = 'Administrator'
-
 
 
 class User(models.Model):
@@ -51,6 +51,7 @@ class Product(models.Model):
     class Meta:
         db_table = 'Product'
 
+
 class Manufacturer(models.Model):
     m_id = models.AutoField(primary_key=True)
     contact = models.CharField(max_length=50)
@@ -64,6 +65,7 @@ class Manufacturer(models.Model):
 
     class Meta:
         db_table = 'Manufacturer'
+
 
 class CPmapping(models.Model):
     id = models.AutoField(primary_key=True)
@@ -84,7 +86,7 @@ class PMmapping(models.Model):
     modify_log = models.TextField()
     add_time = models.DateTimeField(default=datetime.now)
     modify_time = models.DateTimeField(default=datetime.now)
-
+    status = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'pmmapping'

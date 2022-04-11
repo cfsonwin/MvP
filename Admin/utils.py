@@ -2,6 +2,7 @@ import hashlib
 import random
 from datetime import datetime
 
+
 # from django.contrib.gis.geoip2 import GeoIP2
 
 
@@ -22,7 +23,7 @@ def pw_hash_salt(pw, salt):
     return md5.hexdigest()
 
 
-#def get_geo(ip):
+# def get_geo(ip):
 #    g = GeoIP2()
 #    country = g.country(ip)
 #    city = g.city(ip)
@@ -46,11 +47,20 @@ def get_zoom(distance):
         return 2
 
 
+class LineInfo:
+    def __init__(self, lat, lon, lat_p, lon_p):
+        self.lat = lat
+        self.lon = lon
+        self.lat_p = lat_p
+        self.lon_p = lon_p
+
+
 class Manus:
-    def __init__(self, name, loc, addtime, modify_time, description, parent_info):
+    def __init__(self, name, loc, status, addtime, modify_time, description, parent_info):
         self.name = name
         self.lat = loc.split(',')[0]
         self.lon = loc.split(',')[1]
+        self.status = status
         self.modify_time = modify_time
         self.addtime = addtime
         if self.modify_time == self.addtime:
@@ -74,7 +84,7 @@ class Manus:
         # sec_diff = int(time_now.split(' ')[1].split(':')[2]) - int(modifytime.split(' ')[1].split(':')[2])
         if year_diff > 1:
             msg = 'Last Modification: %d years ago' % year_diff
-        elif year_diff ==1:
+        elif year_diff == 1:
             month_count = year_diff * 12 + month_diff
             msg = 'Last Modification: %d month ago' % month_count
         else:
@@ -90,3 +100,12 @@ class Manus:
                     msg = 'Last Modification: today'
 
         return msg
+if __name__ == '__main__':
+    pw = 'user1234'
+    md5 = hashlib.md5()
+    # ran_n = random.randint(100000, 999999)
+    ran_n = 615300
+    new_pass = pw + str(ran_n)  # 'admin123'
+    md5.update(new_pass.encode('utf-8'))
+    print(md5.hexdigest())
+    print(ran_n)

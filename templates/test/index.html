@@ -1,0 +1,109 @@
+{% extends "base/page_base_user.html" %}
+{% load static %}
+{% block css %}
+ <link rel="stylesheet" href="{% static 'leaflet/leaflet.css'%}"/>
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="{% static 'leaflet/leaflet.js' %}"></script>
+ <script src="{% static 'leaflet/leaflet.polylineDecorator.js' %}"></script>
+
+
+{% endblock css %}
+
+{% block title %}
+Homepage
+{% endblock title %}
+
+{% block brandlink %}
+
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block hi %}
+
+{% endblock hi %}
+{% block sidebar %}
+
+{% endblock sidebar %}
+
+{% block signout_model_redirect %}
+
+{% endblock signout_model_redirect %}
+
+{% block page_view %}
+<div id="mapid" style="width: 600px; height: 400px; position: relative;" class="my-3"></div>
+
+
+{% endblock page_view %}
+
+{% block jsbd %}
+<script>
+   var mymap = L.map('mapid').setView({{ map_loc }}, 13);
+   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2ZzZ2VudCIsImEiOiJjbDFwN2N0bWQwcWxzM2JwZ3BncDdpM3JlIn0.6WZHljjw5-YB2ELfb_VW1Q', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+   }).addTo(mymap);
+    var marker1 = L.marker([51.5, -0.09]).addTo(mymap);
+    marker1.bindPopup("<iframe src={% static 'htm/test.htm' %}></iframe>");
+
+    var marker2 = L.marker([51.7, -0.12]).addTo(mymap);
+    marker2.bindPopup("<iframe src={% url 'mT_iframe' 1 %}></iframe>");
+
+    var latlngs = [
+    [51.5, -0.09],
+    [51.7, -0.12]
+    ];
+
+    var polyline1 = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+
+
+    var decorator = L.polylineDecorator(polyline1, {
+        patterns: [
+            // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+            {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
+        ]
+    }).addTo(mymap);
+    var latlngs = [
+    [51.5, -0.09],
+    [51.3, -0.11]
+    ];
+    const lineStyle = {
+            color: "#15d069",
+            opacity: 1,
+            weight: 3,
+            dashArray: '<svg t="1632815394855" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2561" width="200" height="200"><path d="M312.888889 995.555556c-17.066667 0-28.444444-5.688889-39.822222-17.066667-22.755556-22.755556-17.066667-56.888889 5.688889-79.644445l364.088888-329.955555c11.377778-11.377778 17.066667-22.755556 17.066667-34.133333 0-11.377778-5.688889-22.755556-17.066667-34.133334L273.066667 187.733333c-22.755556-22.755556-28.444444-56.888889-5.688889-79.644444 22.755556-22.755556 56.888889-28.444444 79.644444-5.688889l364.088889 312.888889c34.133333 28.444444 56.888889 73.955556 56.888889 119.466667s-17.066667 85.333333-51.2 119.466666l-364.088889 329.955556c-11.377778 5.688889-28.444444 11.377778-39.822222 11.377778z" p-id="2562" fill="#ffffff"></path></svg>',
+            dashOffset: 10
+    };
+    const line = L.polyline(latlngs, lineStyle).addTo(mymap);
+
+        const decorator_line = L.polylineDecorator(line, {
+            patterns: [
+                {
+                    offset: 0,
+
+                    repeat: 20,
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: 5,
+                        polygon: false,
+                        pathOptions: {
+                            stroke: true,
+                            weight: 6,
+                            color: '#fff'
+                        }
+                    })
+                }
+            ]
+        }).addTo(mymap);
+
+
+
+
+</script>
+{% endblock jsbd %}
+

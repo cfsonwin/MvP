@@ -1,0 +1,23 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Sidebar.css'%}">
+
+    <title>MvP | {{ m_id }}</title>
+  </head>
+  <body>
+    {% if status == 1 %}
+      <div class="card-body bg-light">
+      <h4 class="card-text" style="margin-bottom:0px; font-size:18px">{{ info.name }}</h4>
+      <p class="card-text" style="font-size:15px">Log:</br>{{ info.description }}</p>
+      <p class="text-muted" style="font-size:15px; verticle-align:bottom">{{ info.change_msg }}</p></div>
+    {% elif status == 0 %}
+      <p>{{ info }}</p>
+    {% endif %}
+  </body>
+</html>

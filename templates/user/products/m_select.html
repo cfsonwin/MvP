@@ -1,0 +1,68 @@
+{% extends "base/page_base_user.html" %}
+{% load static %}
+{% block brandlink %}
+  {% url 'mU_index' u_id %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block title %}
+add new product
+{% endblock title %}
+
+{% block sidebar %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block navbar-light bg-light sidebar collapse">
+  <div class="sidebar-sticky pt-3 pl-3">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'mU_index'  u_id %}">
+          <span data-feather="home"></span>
+          Dashboard <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'mU_p_show'  u_id %}">
+          <span data-feather="file"></span>
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--
+  <div class="navbar-nav sticky-bottom md-block" id="navbarSupportedHomepage">
+    <ul class="navbar-nav text-white">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Hi, {{request.session.already_login.u_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  -->
+</nav>
+{% endblock sidebar %}
+
+{% block page_view %}
+<div class="container-md py-5 col-md-9">
+    <form role="form" class="form-horizontal needs-validation" action="{% url 'mU_p_edit_add' u_id p_id %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token%}
+        <h4>Please select a method to add a manufacturer for this product</h4>
+        <select type="text" class="selectpicker show-tick form-control mt-3" id="add_method_selected" data-width="98%" data-first-option="false" required data-live-search="true" name="add_method_selected">
+          <option value="1">Add from an exist manufacturer</option>
+          <option value="2">Add a new manufacturer</option>
+        </select>
+        <button type="submit" class="mt-3 btn btn-dark">
+            Continue
+        </button>
+    </form>
+</div>
+{% endblock page_view %}
+
+{% block signout_model_redirect %}
+  {% url 'mU_signin' %}
+{% endblock signout_model_redirect %}

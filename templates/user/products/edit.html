@@ -53,9 +53,10 @@ product edit
     <form role="form" class="form-horizontal needs-validation" action="{% url 'mU_p_update' u_id edit_product.p_id%}" method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token%}
         <div class="form-group">
-            <label for="p_name">Product Name</label>
+            <label for="p_name" class="h5">Product Name</label>
             <input type="text" class="form-control" id="p_name" value="{{edit_product.p_name}}" name="p_name" required>
         </div>
+        <h5>Owners</h5>
         <table class="table table-bordered table-striped table-sm" id="u_name" >
           <thead>
             <tr style="font-size:.5rem">
@@ -73,7 +74,7 @@ product edit
           </tbody>
         </table>
         <div class="form-group">
-            <label for="p_manu">Manufacturers</label>
+            <label for="p_manu" class="h5">Manufacturers</label>
             <table class="table table-bordered table-striped table-sm">
               <thead>
                 <tr style="font-size:.5rem">
@@ -85,6 +86,7 @@ product edit
               </thead>
               <tbody>
               {% for key,Manu in manus_dic.items %}
+              {% if Manu.status == 0 %}
                 <tr class="text-center" style="font-size:.75rem">
                   <td>{{ Manu.name }}</td>
                   <td>{{ Manu.description }}</td>
@@ -96,17 +98,25 @@ product edit
                     </div>
                   </td>
                 </tr>
+              {% elif Manu.status == 1 %}
+                <tr class="text-center" style="color:#dc3545;font-size:.75rem">
+                  <td>{{ Manu.name }}</td>
+                  <td>{{ Manu.description }}</td>
+                  <td>{{ Manu.addtime }}</td>
+                  <td>
+                    <div class="d-flex" >
+                      <a class=" btn btn-outline-success btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Edit</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Recovery</a>
+                    </div>
+                  </td>
+                </tr>
+              {% endif %}
               {% endfor %}
               </tbody>
             </table>
-            <select type="text" class="selectpicker show-tick form-control" id="p_manu" data-width="98%" data-first-option="false" title="Choose one exist Manufacturer" required data-live-search="true" name="p_manu">
-            {% for Manu in M_list %}
-                <option>{{Manu.m_name}}</option>
-            {% endfor %}
-            </select>
         </div>
         <div class="form-group">
-          <label for="p_discription">Product description</label>
+          <label for="p_discription" class="h5">Product description</label>
           <textarea class="form-control" id="p_discription" name="p_discription"  rows="3">{{edit_product.description}}</textarea>
         </div>
         <button type="submit" class="btn btn-dark" data-toggle="modal" data-target="#ConfirmEdit">

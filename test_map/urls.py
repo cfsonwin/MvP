@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import
+from .views import index, iframe
 
 urlpatterns = [
     # homepage
-    path('', ad_index.index, name='mAD_index'),
-
+    path('', index, name='mT_index'),
+    path('iframe?<int:uid>', iframe, name='mT_iframe'),
 
 ]
