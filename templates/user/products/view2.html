@@ -56,6 +56,7 @@ product view
 {% endblock sidebar %}
 
 {% block page_view %}
+<div class="container-md py-5 col-md-9">
 <form role="form" class="form-horizontal my-3" action="{% url 'mU_p_jumpto' u_id %}" method="POST">
   {% csrf_token%}
 <label class="h3" for="p_id_selected">Product Name: </label>
@@ -114,6 +115,7 @@ product view
 
 <div class="container-fluid my-3">
     <div id="mapid" style="width: 600px; height: 400px; position: relative;" class="my-3"></div>
+</div>
 </div>
 {% endblock page_view %}
 

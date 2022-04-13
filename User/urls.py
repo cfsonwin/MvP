@@ -17,6 +17,7 @@ from django.urls import path
 from User.views import index, products
 
 urlpatterns = [
+    path('', index.u_redirect, name='mU_redirect'),
     # homepage
     path('uid?<int:u_id>', index.index, name='mU_index'),
     # product

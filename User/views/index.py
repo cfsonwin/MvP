@@ -11,6 +11,10 @@ from Admin.utils import pw_hash_salt
 
 
 # Create your views here.
+def u_redirect(request):
+    return redirect(reverse('mU_signin'))
+
+
 def index(request, u_id):
     print('xxxxxxxxxxxx', u_id)
     user = User.objects.get(u_id=u_id)
