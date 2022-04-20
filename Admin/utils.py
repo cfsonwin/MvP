@@ -104,7 +104,7 @@ if __name__ == '__main__':
     pw = 'user1234'
     md5 = hashlib.md5()
     # ran_n = random.randint(100000, 999999)
-    ran_n = 615300
+    ran_n = 960988
     new_pass = pw + str(ran_n)  # 'admin123'
     md5.update(new_pass.encode('utf-8'))
     print(md5.hexdigest())
