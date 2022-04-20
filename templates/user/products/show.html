@@ -48,8 +48,12 @@ product show
 {% endblock sidebar %}
 
 {% block page_view %}
+<div class="my-2 pt-3">
+  <h6>Hi {{name}}, all your products are shown here!</h6>
+</div>
+
 <div class="row">
-  <div class="col-md-6 col-lg-4 col-xl-3 pt-5 justify-content-around">
+  <div class="col-md-6 col-lg-4 col-xl-3 pt-2 justify-content-around">
       <div class="card  shadow-sm">
         <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
@@ -57,7 +61,7 @@ product show
           <text alignment-baseline="middle" text-anchor="middle" x="50%" y="50%" fill="#eceeef" dy=".3em" font-size="25">Add a new Product</text>
         </svg>
       </div>
-      <div class="card-body bg-light" style="max-width:400px">
+      <div class="card-body bg-light">
         <h4 class="card-text">Click here</h4>
         <div class="py-2" style="width:auto;height:100px;overflow:scroll;padding:5px;">
           <p class="card-text">Add a new product of you.</p>
@@ -70,23 +74,22 @@ product show
       </div>
     </div>
   {% for product in productlist %}
-    <div class="col-md-6 col-lg-4 col-xl-3 pt-5 justify-content-around">
-      <div class="card  shadow-sm">
+    <div class="col-md-6 col-lg-4 col-xl-3 pt-2 justify-content-around">
+      <div class="card  shadow-sm" >
         <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
           <rect width="100%" height="100%" fill="#55595c"/>
           <text alignment-baseline="middle" text-anchor="middle" x="50%" y="50%" fill="#eceeef" dy=".3em" font-size="30">{{ product.p_name }}</text>
         </svg>
       </div>
-      <div class="card-body bg-light" style="max-width:400px">
+      <div class="card-body bg-light" >
         <h4 class="card-text">{{ product.p_name }}</h4>
         <div class="py-2" style="width:auto;height:100px;overflow:scroll;padding:5px;">
           <p class="card-text">{{ product.description }}</p>
         </div>
         <div class="d-flex justify-content-between align-items-center pt-2">
           <div class="btn-group">
-            <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mU_p_view' u_id product.p_id %}">View</a>
-            <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mU_p_view2' u_id product.p_id %}">View2</a>
+            <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mU_p_view2' u_id product.p_id %}">View</a>
             <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mU_p_edit' u_id product.p_id %}">Edit</a>
           </div>
         </div>

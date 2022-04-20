@@ -75,7 +75,7 @@ product edit
         </table>
         <div class="form-group">
             <label for="p_manu" class="h5">Manufacturers</label>
-            <table class="table table-bordered table-striped table-sm">
+            <table class="table table-bordered table-striped table-sm" id="p_manu">
               <thead>
                 <tr style="font-size:.5rem">
                   <th>Name</th>
@@ -93,8 +93,7 @@ product edit
                   <td>{{ Manu.addtime }}</td>
                   <td>
                     <div class="d-flex" >
-                      <a class=" btn btn-outline-success btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Edit</a>
-                      <a class=" btn btn-outline-danger btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Delete</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Delete</a>
                     </div>
                   </td>
                 </tr>
@@ -105,8 +104,7 @@ product edit
                   <td>{{ Manu.addtime }}</td>
                   <td>
                     <div class="d-flex" >
-                      <a class=" btn btn-outline-success btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Edit</a>
-                      <a class=" btn btn-outline-danger btn-sm mr-2" href="" style="color:#212529;font-size:0.5rem">Recovery</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_recovery' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Recovery</a>
                     </div>
                   </td>
                 </tr>

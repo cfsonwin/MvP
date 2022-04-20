@@ -12,18 +12,23 @@ from User.utils import get_centroid
 
 # Create your views here.
 def show_all(request, u_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     products = CPmapping.objects.filter(c_id=u_id)
     product_list = []
     for product in products:
         product_list.append(Product.objects.get(p_id=product.p_id))
 
     context = {'productlist': product_list,
-               'u_id': u_id
+               'u_id': u_id,
+               'name': hi_name,
                }
     return render(request, 'user/products/show.html', context)
 
 
 def show_details(request, u_id, p_id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     product = Product.objects.get(p_id=p_id)
     owners = CPmapping.objects.filter(p_id=p_id)
     manufacturers = PMmapping.objects.filter(p_id=p_id)
@@ -32,13 +37,6 @@ def show_details(request, u_id, p_id=0):
     for p in products:
         p_id_list.append(p.p_id)
     P_list = Product.objects.filter(p_id__in=p_id_list).exclude(p_id=p_id)
-    # for i in range(1, 10):
-    #     try:
-    #         print(Product.objects.get(p_id=i))
-    #     except:
-    #         print('no such record from id = %d' % i)
-    #         break
-
     u_list = []
     try:
         for owner in owners:
@@ -102,23 +100,29 @@ def show_details(request, u_id, p_id=0):
                    'map': m_html,
                    'add_status': 1,
                    'product': product,
-                   'P_list': P_list
+                   'P_list': P_list,
+                   'name': hi_name,
                    }
 
     except Exception as err:
         print('***************')
         print(err)
         context = {'info': "Showing information for product %s failed, Please try again." % product.p_name,
-                   'add_status': 0}
+                   'add_status': 0,
+                   'name': hi_name,}
     return render(request, 'user/products/view.html', context)
 
 
 def jump_to(request, u_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     p_id = request.POST['p_id_selected']
     return redirect(reverse('mU_p_view2', kwargs={'u_id': u_id, 'p_id': p_id}))
 
 
 def show_details_2(request, u_id, p_id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     product = Product.objects.get(p_id=p_id)
     owners = CPmapping.objects.filter(p_id=p_id)
     manufacturers = PMmapping.objects.filter(p_id=p_id)
@@ -127,12 +131,6 @@ def show_details_2(request, u_id, p_id=0):
     for p in products:
         p_id_list.append(p.p_id)
     P_list = Product.objects.filter(p_id__in=p_id_list).exclude(p_id=p_id)
-    # for i in range(1, 10):
-    #     try:
-    #         print(Product.objects.get(p_id=i))
-    #     except:
-    #         print('no such record from id = %d' % i)
-    #         break
 
     u_list = []
     try:
@@ -148,7 +146,6 @@ def show_details_2(request, u_id, p_id=0):
         for manufacturer in manufacturers:
             if manufacturer.m_pnode == 0:
                 this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
-                print(this_manu.m_id)
                 loc_dic[this_manu.m_id] = Manus(
                     this_manu.m_name,
                     this_manu.loc,
@@ -160,13 +157,11 @@ def show_details_2(request, u_id, p_id=0):
                 )
             elif manufacturer.m_pnode != 0:
                 this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
-                print(this_manu.m_id)
                 lat = float(this_manu.loc.split(',')[0])
                 lon = float(this_manu.loc.split(',')[1])
                 lat_p = float(Manufacturer.objects.get(m_id=manufacturer.m_pnode).loc.split(',')[0])
                 lon_p = float(Manufacturer.objects.get(m_id=manufacturer.m_pnode).loc.split(',')[1])
                 line = LineInfo(lat, lon, lat_p, lon_p)
-                # print(this_manu.m_id)
                 line_dic[this_manu.m_id] = line
                 loc_dic[this_manu.m_id] = Manus(
                     this_manu.m_name,
@@ -202,7 +197,8 @@ def show_details_2(request, u_id, p_id=0):
                    'zoom_index': zoom_index,
                    'add_status': 1,
                    'product': product,
-                   'P_list': P_list
+                   'P_list': P_list,
+                   'name': hi_name,
                    }
 
     except Exception as err:
@@ -210,11 +206,15 @@ def show_details_2(request, u_id, p_id=0):
         print(err)
         context = {'info': "Showing information for product %s failed, Please try again." % product.p_name,
                    'u_id': u_id,
-                   'add_status': 0}
+                   'p_id': p_id,
+                   'add_status': 0,
+                   'name': hi_name,}
     return render(request, 'user/products/view2.html', context)
 
 
 def iframe(request, u_id, p_id, m_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     product = Product.objects.get(p_id=p_id)
     try:
 
@@ -222,7 +222,6 @@ def iframe(request, u_id, p_id, m_id):
         manufacturers = PMmapping.objects.filter(p_id=p_id)
         for manu in manufacturers:
             if manu.m_id == m_id:
-                print(m_id)
                 manufacturer = manu
         this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
         if manufacturer.m_pnode == 0:
@@ -251,17 +250,21 @@ def iframe(request, u_id, p_id, m_id):
             'm_id': m_id,
             'info': info,
             'status': 1,
+            'name': hi_name,
         }
     except Exception as err:
         print('***************')
         print(err)
         context = {'info': "Showing information for product %s failed, Please try again." % product.p_name,
                    'u_id': u_id,
-                   'status': 0}
+                   'status': 0,
+                   'name': hi_name,}
     return render(request, 'user/products/iframe.html', context)
 
 
 def edit(request, u_id, p_id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     edit_product = Product.objects.get(p_id=p_id)
     # e_owners = CPmapping.objects.filter(p_id=p_id).exclude(c_id=u_id)
     e_owners = CPmapping.objects.filter(p_id=p_id)
@@ -307,7 +310,8 @@ def edit(request, u_id, p_id=0):
                    'M_list': M_list,
                    'owners': users,
                    'manus_dic': manus_dic,
-                   'user_dic': user_dic
+                   'user_dic': user_dic,
+                   'name': hi_name,
                    }
         return render(request, 'user/products/edit.html', context)
     except Exception as err:
@@ -316,11 +320,14 @@ def edit(request, u_id, p_id=0):
         context = {'info': "Unknown Error occurred, Please try again later.",
                    'u_id': u_id,
                    'p_id': p_id,
+                   'name': hi_name,
                    }
         return render(request, 'user/products/info.html', context)
 
 
 def updated(request, u_id, p_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     edit_product = Product.objects.get(p_id=p_id)
     try:
         edit_discription = request.POST['p_discription']
@@ -330,6 +337,7 @@ def updated(request, u_id, p_id):
                    'update_status': 1,
                    'p_id': p_id,
                    'u_id': u_id,
+                   'name': hi_name,
                    }
     except Exception as err:
         print('***************')
@@ -338,18 +346,24 @@ def updated(request, u_id, p_id):
                    'update_status': 0,
                    'p_id': p_id,
                    'u_id': u_id,
+                   'name': hi_name,
                    }
     return render(request, 'user/products/update.html', context)
 
 
 def add_new_product(request, u_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     context = {
-        'u_id': u_id
+        'u_id': u_id,
+        'name': hi_name,
     }
     return render(request, 'user/products/add_p.html', context)
 
 
 def insert_new_product(request, u_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     try:
         msg = []
         new_product = Product()
@@ -368,24 +382,29 @@ def insert_new_product(request, u_id):
             context = {'info': "Successfully added.",
                        'add_status': 1,
                        'u_id': u_id,
-                       'new_product': new_p
+                       'new_product': new_p,
+                       'name': hi_name,
                        }
         else:
             context = {'info': msg,
                        'add_status': 0,
-                       'u_id': u_id
+                       'u_id': u_id,
+                       'name': hi_name,
                        }
     except Exception as err:
         print('***************')
         print(err)
         context = {'info': ["Add new product failed!"],
                    'add_status': 0,
-                   'u_id': u_id
+                   'u_id': u_id,
+                   'name': hi_name,
                    }
     return render(request, 'user/products/insert_p.html', context)
 
 
 def insert_cpmapping(request, u_id, p_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     try:
         msg = []
         new_map = CPmapping()
@@ -405,14 +424,19 @@ def insert_cpmapping(request, u_id, p_id):
 
 
 def add_new_manu_select(request, u_id, p_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     context = {
         'u_id': u_id,
-        'p_id': p_id
+        'p_id': p_id,
+        'name': hi_name,
     }
     return render(request, 'user/products/m_select.html', context)
 
 
 def add_new_manu(request, u_id, p_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     selected_method = int(request.POST['add_method_selected'])
     M_list_all = Manufacturer.objects.all()
     manufacturers = PMmapping.objects.filter(p_id=p_id)
@@ -427,14 +451,16 @@ def add_new_manu(request, u_id, p_id):
             'M_list': M_list,
             'M_list_all': Pnode_list,
             'u_id': u_id,
-            'p_id': p_id
+            'p_id': p_id,
+            'name': hi_name,
         }
         return render(request, 'user/products/add_exist_m.html', context)
     elif selected_method == 2:
         context = {
             'M_list': Pnode_list,
             'u_id': u_id,
-            'p_id': p_id
+            'p_id': p_id,
+            'name': hi_name,
         }
         return render(request, 'user/products/add_new_m.html', context)
     else:
@@ -442,6 +468,8 @@ def add_new_manu(request, u_id, p_id):
 
 
 def insert_new_manu(request, u_id, p_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     try:
         msg = []
         new_manu = Manufacturer()
@@ -474,7 +502,6 @@ def insert_new_manu(request, u_id, p_id):
         if (m_pnode not in m_id_list) and m_pnode != 0:
             msg.append('This parent node not exist!')
         if len(msg) == 0:
-            print('*****get here*******')
             new_manu.save()
             new_m = Manufacturer.objects.get(m_name=m_name)
             context = {'info': "Successfully added.",
@@ -482,13 +509,15 @@ def insert_new_manu(request, u_id, p_id):
                        'u_id': u_id,
                        'p_id': p_id,
                        'new_manu': new_m,
-                       'm_pnode': m_pnode
+                       'm_pnode': m_pnode,
+                       'name': hi_name,
                        }
         else:
             context = {'info': msg,
                        'add_status': 0,
                        'p_id': p_id,
-                       'u_id': u_id
+                       'u_id': u_id,
+                       'name': hi_name,
                        }
     except Exception as err:
         print('***************')
@@ -497,16 +526,17 @@ def insert_new_manu(request, u_id, p_id):
                    'add_status': 0,
                    'u_id': u_id,
                    'p_id': p_id,
+                   'name': hi_name,
                    }
     return render(request, 'user/products/insert_new_m.html', context)
 
 
 def insert_pmmapping_exist(request, u_id, p_id):
-
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     try:
 
         m_id = request.POST['m_id_selected']
-        print(m_id)
         new_map = PMmapping()
         new_map.p_id = p_id
         new_map.m_id = m_id
@@ -515,7 +545,8 @@ def insert_pmmapping_exist(request, u_id, p_id):
             context = {
                 'u_id': u_id,
                 'p_id': p_id,
-                'info': "The parent node of this manufacturer must be different!"
+                'info': "The parent node of this manufacturer must be different!",
+                'name': hi_name,
             }
             return render(request, 'user/products/info_2.html', context)
 
@@ -525,7 +556,7 @@ def insert_pmmapping_exist(request, u_id, p_id):
         else:
             new_map.m_pnode = m_pnode
             pnode_Tlevel = PMmapping.objects.filter(p_id=p_id).get(m_id=m_pnode).m_Tlevel
-            new_map.m_Tlevel = pnode_Tlevel + 1
+            new_map.m_Tlevel = int(pnode_Tlevel) + 1
         new_map.add_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_map.modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_map.modify_log = "First time commit"
@@ -539,28 +570,27 @@ def insert_pmmapping_exist(request, u_id, p_id):
 
 
 def insert_pmmapping_new(request, u_id, p_id, m_id, m_pnode):
-
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     try:
-        m_id = int(m_id)
         new_map = PMmapping()
         new_map.p_id = p_id
         new_map.m_id = m_id
-        m_pnode = int(m_pnode)
-        if m_pnode == int(m_id):
+        if m_pnode == m_id:
             context = {
                 'u_id': u_id,
                 'p_id': p_id,
-                'info': "The parent node of this manufacturer must be diffrernt!"
+                'info': "The parent node of this manufacturer must be diffrernt!",
+                'name': hi_name,
             }
             return render(request, 'user/products/info_2.html', context)
-
         if m_pnode == 0:
             new_map.m_pnode = 0
             new_map.m_Tlevel = 1
         else:
             new_map.m_pnode = m_pnode
             pnode_Tlevel = PMmapping.objects.filter(p_id=p_id).get(m_id=m_pnode).m_Tlevel
-            new_map.m_Tlevel = pnode_Tlevel + 1
+            new_map.m_Tlevel = int(pnode_Tlevel) + 1
         new_map.add_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_map.modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_map.modify_log = "First time commit"
@@ -573,3 +603,55 @@ def insert_pmmapping_new(request, u_id, p_id, m_id, m_pnode):
     return redirect(reverse('mU_p_view2', kwargs={'u_id': u_id, 'p_id': p_id}))
 
 
+def pm_delete(request, u_id=0, p_id=0, id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
+    del_pm = PMmapping.objects.get(id=id)
+    manu = Manufacturer.objects.get(m_id=del_pm.m_id)
+    try:
+        del_pm.status = 1
+        del_pm.save()
+        context = {'info': "Manufacturer %s has been successfully removed." % manu.m_name,
+                   'del_status': 1,
+                   'u_id': u_id,
+                   'p_id': p_id,
+                   'name': hi_name,
+                   }
+
+    except Exception as err:
+        print('***************')
+        print(err)
+        context = {'info': "Removing %s failed, Please try again." % manu.m_name,
+                   'del_status': 0,
+                   'u_id': u_id,
+                   'p_id': p_id,
+                   'name': hi_name,
+                   }
+    return render(request, 'user/products/delete.html', context)
+
+
+def pm_recovery(request, u_id=0, p_id=0, id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
+    rec_pm = PMmapping.objects.get(id=id)
+    manu = Manufacturer.objects.get(m_id=rec_pm.m_id)
+    try:
+        rec_pm.status = 0
+        rec_pm.save()
+        context = {'info': "Information recovery succeeded",
+                   'add_status': 1,
+                   'u_id': u_id,
+                   'p_id': p_id,
+                   'name': hi_name,
+                   }
+
+    except Exception as err:
+        print('***************')
+        print(err)
+        context = {'info': "Information recovery failed, Please try again.",
+                   'add_status': 0,
+                   'u_id': u_id,
+                   'p_id': p_id,
+                   'name': hi_name,
+                   }
+    return render(request, 'user/products/recovery.html', context)

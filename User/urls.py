@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+
 from User.views import index, products
 
 urlpatterns = [
@@ -22,6 +23,7 @@ urlpatterns = [
     path('uid?<int:u_id>', index.index, name='mU_index'),
     # product
     path('uid?<int:u_id>/product/', products.show_all, name='mU_p_show'),
+    # product view
     path('uid?<int:u_id>/product/add', products.add_new_product, name='mU_p_add'),
     path('uid?<int:u_id>/product/insert', products.insert_new_product, name='mU_p_insert'),
     path('uid?<int:u_id>/product/insert?p_id=<int:p_id>', products.insert_cpmapping, name='mU_p_insert_cpmapping'),
@@ -29,7 +31,6 @@ urlpatterns = [
     path('uid?<int:u_id>/product/view2/<int:p_id>', products.show_details_2, name='mU_p_view2'),
     path('uid?<int:u_id>/product/view2/<int:p_id>?<int:m_id>', products.iframe, name='mU_p_iframe'),
     path('uid?<int:u_id>/product/jumpto', products.jump_to, name='mU_p_jumpto'),
-    path('uid?<int:u_id>/product/edit/<int:p_id>', products.edit, name='mU_p_edit'),
     path('uid?<int:u_id>/product/edit/<int:p_id>/select', products.add_new_manu_select, name='mU_p_edit_select'),
     path('uid?<int:u_id>/product/edit/<int:p_id>/add', products.add_new_manu, name='mU_p_edit_add'),
     path('uid?<int:u_id>/product/edit/<int:p_id>/insert', products.insert_new_manu, name='mU_p_edit_insert'),
@@ -39,6 +40,11 @@ urlpatterns = [
     path('uid?<int:u_id>/product/edit/<int:p_id>/insert?method=exist', products.insert_pmmapping_exist,
          name='mU_p_edit_insert_pmmapping_exist'),
     path('uid?<int:u_id>/product/update/<int:p_id>', products.updated, name='mU_p_update'),
+    # product edit
+    path('uid?<int:u_id>/product/edit/<int:p_id>', products.edit, name='mU_p_edit'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:id>/del', products.pm_delete, name='mU_p_delete'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:id>/recovery', products.pm_recovery, name='mU_p_recovery'),
+
     # Sign in
     path('signin/', index.signin_form, name='mU_signin'),
     path('dosignin/', index.do_signin, name='mU_dosignin'),

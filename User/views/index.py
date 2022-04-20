@@ -21,7 +21,7 @@ def index(request, u_id):
 
     context = {
         "user": user,
-        'u_firstname': user.u_name.split('/')[0],
+        'name': user.u_name.split('/')[0],
         'u_lastname': user.u_name.split('/')[1],
 
     }
