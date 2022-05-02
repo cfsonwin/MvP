@@ -1,11 +1,18 @@
 {% extends "base/page_base_user.html" %}
+{% load static %}
+{% block css %}
+{% endblock css %}
+
+{% block jshd %}
+<script src="{% static 'chart/Chart.bundle.min.js' %}"></script>
+{% endblock jshd %}
 
 {% block title %}
 Homepage
 {% endblock title %}
 
 {% block brandlink %}
-  {% url 'mU_index' user.u_id%}
+  {% url 'mU_index' user.u_id %}
 {% endblock brandlink %}
 
 {% block brand_small %}
@@ -47,10 +54,202 @@ Manage your own Virtual Products
 </nav>
 {% endblock sidebar %}
 
-{% block signout_model_redirect %}
-  {% url 'mU_signin' %}
-{% endblock signout_model_redirect %}
+
 
 {% block page_view %}
-HomePage
+<div class="container mt-3">
+    <h3>Homepage</h3>
+    <small>Here get an overview of your account</small>
+</div>
+<br/>
+<div class="container mt-3">
+    <h4>Statistical Overview </h4>
+    <div class="row">
+        <div class="col-md-5">
+            <canvas id="myChart1" width="50%" height="50%"></canvas>
+        </div>
+        <div class="col-md-5">
+            <canvas id="myChart2" width="50%" height="50%"></canvas>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="container mt-3">
+    <h4>New request for passing product forward</h4>
+    <table class="table table-bordered table-striped table-sm" id="m_needvalid">
+      <thead>
+        <tr style="font-size:.5rem">
+          <th>Product name</th>
+          <th>New request from</th>
+          <th>Get from</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for x,y,z,t in needvalid_list %}
+        <tr class="text-center" style="font-size:.75rem">
+          <td>{{ y }}</td>
+          <td>{{ z }}</td>
+          <td>{{ t }}</td>
+          <td>
+            <div class="d-flex" >
+              <a class=" btn btn-outline-success btn-sm mr-2" href="{% url 'mU_request_agree' user.u_id x %}" style="color:#212529;font-size:0.5rem">OK</a>
+              <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_request_refuse' user.u_id x %}" style="color:#212529;font-size:0.5rem">Refuse</a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+<br/>
+<div class="container mt-3">
+    <h4>Feedback from manufacturer</h4>
+        <table class="table table-bordered table-striped table-sm" id="m_needfeedback">
+      <thead>
+        <tr style="font-size:.5rem">
+          <th>Product name</th>
+          <th>New Feedback</th>
+          <th>Get from</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for id,_p_id,p_name,m_name,new_feedback in feedback_table_list %}
+        <tr class="text-center" style="font-size:.75rem">
+          <td>{{ p_name }}</td>
+          <td>{{ new_feedback }}</td>
+          <td>{{ m_name }}</td>
+          <td>
+            <div class="d-flex" >
+              <a class=" btn btn-outline-success btn-sm mr-2" href="{% url 'mU_reply' user.u_id id %}" style="color:#212529;font-size:0.5rem">Reply</a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+
+
+
+
+<script>
+    var ctx = document.getElementById("myChart1");
+    var type = 'bar';
+    var array_all = [];
+    var array_modified = [];
+    var array_px = [];
+    {% for x, y in info %}
+        array_all.push({{x}});
+        array_modified.push({{y}});
+    {% endfor %}
+    var max = Math.max(...array_all);
+    var yAxes_max = max - max%10 + 10;
+    {% for p in p_list %}
+        array_px.push("{{p}}");
+    {% endfor %}
+    var data = {
+        labels: array_px,
+        datasets: [
+            {
+                label: 'all',
+                data: array_all,
+                backgroundColor: 'rgba(79,172,53,0.1)',
+                borderWidth: 2,
+            },
+            {
+                label: 'modified',
+                data: array_modified,
+                backgroundColor: 'rgba(134,171,216,0.2)',
+            }
+        ]
+    }
+    var myChart = new Chart(ctx, {
+        type: type,
+        data: data,
+
+        options: {
+
+            title: {
+                display: true,
+                text: "How many manufactures change your product",
+                fontSize: '24',
+            },
+            scales: {
+                xAxes: [
+                    {
+                        stacked: true
+                    }
+                ],
+                yAxes:[{
+                    ticks: {
+                        min: 0,
+                        max: yAxes_max
+                    }
+                }]
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+    });
+    var ctx2 = document.getElementById("myChart2");
+    var type2 = 'line';
+    var array_x_lable = [];
+    var array_x_value = [];
+    {% for key, value in info2.items %}
+        array_x_lable.push({{key}});
+        array_x_value.push({{value}});
+    {% endfor %}
+    var max2 = Math.max(...array_x_value);
+    var yAxes_max2 = max2 - max2%10 + 10;
+    var data2 = {
+        labels: array_x_lable,
+        datasets: [
+            {
+                label: 'all manufacturers',
+                data: array_x_value,
+                borderWidth: 2,
+            },
+
+        ]
+    }
+    var myChart22 = new Chart(ctx2, {
+        type: type2,
+        data: data2,
+
+        options: {
+
+            title: {
+                display: true,
+                text: "How many manufactures working on your product",
+                fontSize: '24',
+            },
+            scales: {
+
+                yAxes:[{
+                    ticks: {
+                        min: 0,
+                        max: yAxes_max2
+                    }
+                }]
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+    });
+</script>
 {% endblock page_view %}

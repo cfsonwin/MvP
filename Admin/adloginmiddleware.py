@@ -16,7 +16,7 @@ class AdLoginMiddleware:
         # if already login
         urllist = ['/admin/signin/', '/admin/dosignin/', '/admin/signout/', '/admin/signup/', '/admin/signupcheck/']
         if re.match(r'^/admin', request.path) and (request.path not in urllist):
-            if 'already_login' not in request.session:
+            if 'already_login_ad' not in request.session:
                 return redirect(reverse('mAD_signin'))
         response = self.get_response(request)
         # Code to be executed for each request/response after

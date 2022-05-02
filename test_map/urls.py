@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import index, iframe
+from .views import index, iframe, select_test, get_select_info, chart_generate
 
 urlpatterns = [
     # homepage
     path('', index, name='mT_index'),
     path('iframe?<int:uid>', iframe, name='mT_iframe'),
+    path('select', select_test, name='mT_select'),
+    path('select_show', get_select_info, name='mT_get_select_info'),
+    path('chart_generate', chart_generate, name='mT_chart'),
 
 ]

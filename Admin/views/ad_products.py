@@ -1,10 +1,8 @@
-from datetime import datetime
-
 import folium
 from django.shortcuts import render
 
 from Admin.models import Product, CPmapping, User, PMmapping, Manufacturer
-from Admin.utils import get_center_coor, Manus
+from Admin.utils import get_center_coor, Manus, LineInfo
 
 
 # Create your views here.
@@ -13,6 +11,45 @@ def show_all(request):
     p_list = product.all()
     context = {'productlist': p_list}
     return render(request, 'admin/products/show.html', context)
+
+
+def get_loc_dict(manufacturers):
+    loc_dic = {}
+    line_dic = {}
+    for manufacturer in manufacturers:
+        if manufacturer.m_pnode == 0:
+            this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
+            loc_dic[this_manu.m_id] = Manus(
+                this_manu.m_name,
+                this_manu.loc,
+                manufacturer.status,
+                manufacturer.add_time,
+                manufacturer.modify_time,
+                manufacturer.modify_log,
+                "Direct get from product constructor",
+                manufacturer.producing_period,
+                this_manu.addr
+            )
+        elif manufacturer.m_pnode != 0:
+            this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
+            lat = float(this_manu.loc.split(',')[0])
+            lon = float(this_manu.loc.split(',')[1])
+            lat_p = float(Manufacturer.objects.get(m_id=manufacturer.m_pnode).loc.split(',')[0])
+            lon_p = float(Manufacturer.objects.get(m_id=manufacturer.m_pnode).loc.split(',')[1])
+            line = LineInfo(lat, lon, lat_p, lon_p)
+            line_dic[this_manu.m_id] = line
+            loc_dic[this_manu.m_id] = Manus(
+                this_manu.m_name,
+                this_manu.loc,
+                manufacturer.status,
+                manufacturer.add_time,
+                manufacturer.modify_time,
+                manufacturer.modify_log,
+                "Get from %s" % Manufacturer.objects.get(m_id=manufacturer.m_pnode).m_name,
+                manufacturer.producing_period,
+                this_manu.addr
+            )
+    return line_dic, loc_dic
 
 
 def show_details(request, p_id=0):
@@ -33,31 +70,8 @@ def show_details(request, p_id=0):
     try:
         for owner in owners:
             u_list.append(owner.c_id)
-        loc_dic = {}
+        line_dic, loc_dic = get_loc_dict(manufacturers)
         m = folium.Map(width='100%', height='100%', location=get_center_coor(), zoom_start=8)
-        for manufacturer in manufacturers:
-            if manufacturer.m_pnode == 0:
-                this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
-                m_list_0.append(this_manu.m_name)
-                loc_dic[manufacturer.id] = Manus(
-                    this_manu.m_name,
-                    this_manu.loc,
-                    manufacturer.add_time,
-                    manufacturer.modify_time,
-                    manufacturer.modify_log
-                )
-            elif manufacturer.m_pnode != 0:
-                this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
-                m_list.append(this_manu.m_name)
-                parent_list.append(Manufacturer.objects.get(m_id=manufacturer.m_pnode).m_name)
-                loc_dic[manufacturer.id] = Manus(
-                    this_manu.m_name,
-                    this_manu.loc,
-                    manufacturer.add_time,
-                    manufacturer.modify_time,
-                    manufacturer.modify_log
-                )
-        print(loc_dic)
         for key in loc_dic.keys():
             info = loc_dic[key]
             iframe = folium.IFrame(
@@ -93,7 +107,7 @@ def edit(request, p_id=0):
     edit_product = Product.objects.get(p_id=p_id)
     try:
         context = {'edit_product': edit_product,
-        }
+                   }
         return render(request, 'admin/products/edit.html', context)
     except Exception as err:
         print('***************')

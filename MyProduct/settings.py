@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Admin',
     'User',
+    'test_map',
+    'Manu',
+    'User.utils',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # register self-defined middle ware
     'Admin.adloginmiddleware.AdLoginMiddleware',  # middle ware for admin-login
+    'Manu.manuloginmiddleware.ManuLoginMiddleware',  # middle ware for manu-login
+    'User.userloginmiddleware.UserLoginMiddleware',  # middle ware for user-login
 ]
 
 ROOT_URLCONF = 'MyProduct.urls'

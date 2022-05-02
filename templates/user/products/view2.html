@@ -76,7 +76,7 @@ product view
   <thead>
     <tr style="font-size:.5rem">
       <th>Name</th>
-      <th>Contact</th>
+      <th>Contact Email</th>
     </tr>
   </thead>
   <tbody>
@@ -96,6 +96,8 @@ product view
       <th>Name</th>
       <th>Info</th>
       <th>Add Time</th>
+      <th>Location</th>
+      <th>Producing period</th>
     </tr>
   </thead>
   <tbody>
@@ -104,11 +106,13 @@ product view
       <td>{{ Manu.name }}</td>
       <td>{{ Manu.parent_info }}</td>
       <td>{{ Manu.addtime }}</td>
+      <td>{{ Manu.addr }}</td>
+      <td>{{ Manu.producing_period }}</td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
-<a class="btn btn-link bg-light" style="color:#212529" href="{% url 'mU_p_edit_select' u_id p_id %}">
+<a class="btn btn-link bg-light" style="color:#212529" href="{% url 'mU_p_edit_add' u_id p_id %}">
   + Add new manufacturer
 </a>
 
@@ -130,8 +134,40 @@ product view
       zoomOffset: -1,
       accessToken: 'your.mapbox.access.token'
   }).addTo(mymap);
+  var blueIcon = new L.Icon({
+	iconUrl: "{% static 'image/marker-icon-blue.png' %}",
+	shadowUrl: "{% static 'image/marker-shadow.png' %}",
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+  });
+  var redIcon = new L.Icon({
+	iconUrl: "{% static 'image/marker-icon-red.png' %}",
+	shadowUrl: "{% static 'image/marker-shadow.png' %}",
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+  });
+  var yellowIcon = new L.Icon({
+	iconUrl: "{% static 'image/marker-icon-yellow.png' %}",
+	shadowUrl: "{% static 'image/marker-shadow.png' %}",
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+  });
   {% for key,Manu in loc_dic.items %}
-    var marker_{{ key }} = new L.marker([{{Manu.lat}}, {{Manu.lon}}]).addTo(mymap);
+    var marker_{{ key }} = new L.marker([{{Manu.lat}}, {{Manu.lon}}], {icon: blueIcon}).addTo(mymap);
+    marker_{{ key }}.bindPopup("<iframe src={% url 'mU_p_iframe' u_id p_id key %}></iframe>");
+  {% endfor %}
+  {% for key,Manu in loc_dic_need_valid.items %}
+    var marker_{{ key }} = new L.marker([{{Manu.lat}}, {{Manu.lon}}], {icon: yellowIcon}).addTo(mymap);
+    marker_{{ key }}.bindPopup("<iframe src={% url 'mU_p_iframe' u_id p_id key %}></iframe>");
+  {% endfor %}
+  {% for key,Manu in loc_dic_no_valid.items %}
+    var marker_{{ key }} = new L.marker([{{Manu.lat}}, {{Manu.lon}}], {icon: redIcon}).addTo(mymap);
     marker_{{ key }}.bindPopup("<iframe src={% url 'mU_p_iframe' u_id p_id key %}></iframe>");
   {% endfor %}
 
@@ -159,10 +195,54 @@ product view
         ]
     }).addTo(mymap);
   {% endfor %}
-
+  {% for m_id,line in line_dic_need_valid.items %}
+    var latlngs_{{ m_id }} = [
+    [{{line.lat_p}}, {{line.lon_p}}],
+    [{{line.lat}}, {{line.lon}}]
+    ];
+    var line_{{ m_id }} = new L.polyline(latlngs_{{ m_id }}, {color: '#cccc00',weight: 3,opacity: 1,smoothFactor: 1}).addTo(mymap);
+    var decorator_line_{{ m_id }} = L.polylineDecorator(line_{{ m_id }}, {
+        patterns: [
+            {
+                offset: 20,
+                repeat: 20,
+                symbol: L.Symbol.arrowHead({
+                    pixelSize: 8,
+                    polygon: false,
+                    pathOptions: {
+                        stroke: true,
+                        weight: 2,
+                        color: '#cccc00'
+                    }
+                })
+            }
+        ]
+    }).addTo(mymap);
+  {% endfor %}
+  {% for m_id,line in line_dic_no_valid.items %}
+    var latlngs_{{ m_id }} = [
+    [{{line.lat_p}}, {{line.lon_p}}],
+    [{{line.lat}}, {{line.lon}}]
+    ];
+    var line_{{ m_id }} = new L.polyline(latlngs_{{ m_id }}, {color: '#ff5050',weight: 3,opacity: 1,smoothFactor: 1}).addTo(mymap);
+    var decorator_line_{{ m_id }} = L.polylineDecorator(line_{{ m_id }}, {
+        patterns: [
+            {
+                offset: 20,
+                repeat: 20,
+                symbol: L.Symbol.arrowHead({
+                    pixelSize: 8,
+                    polygon: false,
+                    pathOptions: {
+                        stroke: true,
+                        weight: 2,
+                        color: '#ff5050'
+                    }
+                })
+            }
+        ]
+    }).addTo(mymap);
+  {% endfor %}
 </script>
 {% endblock jsbd %}
 
-{% block signout_model_redirect %}
-  {% url 'mU_signin' %}
-{% endblock signout_model_redirect %}

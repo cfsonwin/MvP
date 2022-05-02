@@ -1,0 +1,90 @@
+{% extends "base/page_base_manu.html" %}
+
+{% block title %}
+Homepage
+{% endblock title %}
+
+{% block brandlink %}
+  {% url 'mM_index' m_id %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+For Manufacturer | HomePage
+{% endblock brand_small %}
+
+
+
+{% block page_view %}
+<div class="my-2 pt-3">
+  <h6>Hi {{name}}, all your products are shown here!</h6>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-4 col-xl-3 pt-2 justify-content-around">
+      <div class="card  shadow-sm">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <title>Placeholder</title>
+          <rect width="100%" height="100%" fill="#55595c"/>
+          <text alignment-baseline="middle" text-anchor="middle" x="50%" y="50%" fill="#eceeef" dy=".3em" font-size="25">Add a new Product</text>
+        </svg>
+      </div>
+      <div class="card-body bg-light">
+        <h4 class="card-text">Click here</h4>
+        <div class="py-2" style="width:auto;height:100px;overflow:scroll;padding:5px;">
+          <p class="card-text">Add a product you are working on.</p>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pt-2">
+          <div class="btn-group">
+            <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mM_p_select' m_id  %}">Get start !</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% for product in productlist_activ %}
+      <div class="col-md-6 col-lg-4 col-xl-3 pt-2 justify-content-around">
+        <div class="card  shadow-sm" >
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <text alignment-baseline="middle" text-anchor="middle" x="50%" y="50%" fill="#eceeef" dy=".3em" font-size="30">{{ product.p_name }}</text>
+          </svg>
+        </div>
+        <div class="card-body bg-light" >
+          <h4 class="card-text">{{ product.p_name }}</h4>
+          <div class="py-2" style="width:auto;height:100px;overflow:scroll;padding:5px;">
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center pt-2">
+            <div class="btn-group">
+              <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mM_view' m_id product.p_id %}">View</a>
+              <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'mM_feedback' m_id product.p_id %}" >Feedback</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+      {% for product in productlist_need_validation %}
+      <div class="col-md-6 col-lg-4 col-xl-3 pt-2 justify-content-around">
+        <div class="card  shadow-sm" >
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <text alignment-baseline="middle" text-anchor="middle" x="50%" y="50%" fill="#eceeef" dy=".3em" font-size="30">{{ product.p_name }}</text>
+          </svg>
+        </div>
+        <div class="card-body bg-light" >
+          <h4 class="card-text" style="color:#CEC8C8;">{{ product.p_name }}</h4>
+          <div class="py-2" style="width:auto;height:100px;overflow:scroll;padding:5px;">
+            <small class="card-text" style="color:#FF6666;">Waiting for permission from constructor</small>
+          </div>
+          <div class="d-flex justify-content-between align-items-center pt-2">
+            <div class="btn-group">
+              <a type="button" class="btn btn-sm btn-outline-secondary disabled" href="" tabindex="-1" role="button" aria-disabled="true">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+</div>
+{% endblock page_view %}
