@@ -21,13 +21,17 @@ urlpatterns = [
     path('', index.u_redirect, name='mU_redirect'),
     # homepage
     path('uid?<int:u_id>', index.index, name='mU_index'),
+    path('uid?<int:u_id>/request_agreed/pm_id?<int:pm_id>', index.request_agree, name='mU_request_agree'),
+    path('uid?<int:u_id>/request_refuse/pm_id?<int:pm_id>', index.request_refuse, name='mU_request_refuse'),
+    path('uid?<int:u_id>/reply/pm_id?<int:pm_id>', index.reply_form, name='mU_reply'),
+    path('uid?<int:u_id>/reply_insert/pm_id?<int:pm_id>', index.mU_reply_insert, name='mU_reply_insert'),
     # product
     path('uid?<int:u_id>/product/', products.show_all, name='mU_p_show'),
     # product view
     path('uid?<int:u_id>/product/add', products.add_new_product, name='mU_p_add'),
     path('uid?<int:u_id>/product/insert', products.insert_new_product, name='mU_p_insert'),
     path('uid?<int:u_id>/product/insert?p_id=<int:p_id>', products.insert_cpmapping, name='mU_p_insert_cpmapping'),
-    path('uid?<int:u_id>/product/view/<int:p_id>', products.show_details, name='mU_p_view'),
+    #path('uid?<int:u_id>/product/view/<int:p_id>', products.show_details, name='mU_p_view'),
     path('uid?<int:u_id>/product/view2/<int:p_id>', products.show_details_2, name='mU_p_view2'),
     path('uid?<int:u_id>/product/view2/<int:p_id>?<int:m_id>', products.iframe, name='mU_p_iframe'),
     path('uid?<int:u_id>/product/jumpto', products.jump_to, name='mU_p_jumpto'),

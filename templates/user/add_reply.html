@@ -1,0 +1,91 @@
+{% extends "base/page_base_user.html" %}
+{% load static %}
+{% block css %}
+{% endblock css %}
+
+{% block jshd %}
+<script src="{% static 'chart/Chart.bundle.min.js' %}"></script>
+{% endblock jshd %}
+
+{% block title %}
+Homepage
+{% endblock title %}
+
+{% block brandlink %}
+  {% url 'mU_index' user.u_id %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+Manage your own Virtual Products
+{% endblock brand_small %}
+
+{% block sidebar %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block navbar-light bg-light sidebar collapse">
+  <div class="sidebar-sticky pt-3 pl-3">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'mU_index' user.u_id%}">
+          <span data-feather="home"></span>
+          Dashboard <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'mU_p_show' user.u_id %}">
+          <span data-feather="file"></span>
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--
+  <div class="navbar-nav sticky-bottom md-block" id="navbarSupportedHomepage">
+    <ul class="navbar-nav text-white">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Hi, {{request.session.already_login.u_name}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-link" type="button" data-toggle="modal" data-target="#ConfirmExit" style="font-size:0.5rem;color:#000">Sign Out</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  -->
+</nav>
+{% endblock sidebar %}
+
+
+
+{% block page_view %}
+<div class="container-md py-5 col-md-9">
+    <form role="form" class="form-horizontal needs-validation" action="{% url 'mU_reply_insert' user.u_id pm_id %}" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token%}
+        <div class="form-group">
+          <label for="fb_reply" class="h4 mb-2">Reply to {{ m_name }}</label>
+          <textarea class="form-control" id="fb_reply" name="fb_reply"  rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark">
+            Submit
+        </button>
+    </form>
+</div>
+<script>
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+    </script>
+{% endblock page_view %}

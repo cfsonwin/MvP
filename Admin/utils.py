@@ -56,7 +56,7 @@ class LineInfo:
 
 
 class Manus:
-    def __init__(self, name, loc, status, addtime, modify_time, description, parent_info):
+    def __init__(self, name, loc, status, addtime, modify_time, modify_log, parent_info, producing_period, addr):
         self.name = name
         self.lat = loc.split(',')[0]
         self.lon = loc.split(',')[1]
@@ -69,8 +69,38 @@ class Manus:
         else:
             self.change_st = 1
             self.change_msg = self.get_time_diff()
-        self.description = description
+        self.description = modify_log
         self.parent_info = parent_info
+        self.log_dic = self.get_modify_log()
+        self.addr = self.get_addr(addr)
+        self.producing_period = producing_period
+
+    def get_addr(self, addr):
+        addr_arr = addr.split(',')
+        if len(addr_arr) >= 4:
+            addr_newarr = addr.split(',')[-4:]
+            addr = '%s,%s,%s,%s' % (
+                addr_newarr[0],
+                addr_newarr[1],
+                addr_newarr[2],
+                addr_newarr[3],
+            )
+
+        else:
+            addr = addr
+        return addr
+
+    def get_modify_log(self):
+        log = self.description
+        log_dic = {}
+        i = 0
+        if ';;;' in log:
+            while log.split(';;;')[i] != '':
+                log_dic[log.split(';;;')[i].split('::')[0]] = log.split(';;;')[i].split('::')[1]
+                i += 1
+        else:
+            log_dic['error'] = log
+        return log_dic
 
     def get_time_diff(self):
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -100,12 +130,14 @@ class Manus:
                     msg = 'Last Modification: today'
 
         return msg
+
+
 if __name__ == '__main__':
     pw = 'user1234'
     md5 = hashlib.md5()
-    # ran_n = random.randint(100000, 999999)
-    ran_n = 615300
+    ran_n = random.randint(100000, 999999)
+    print(ran_n)
+    ran_n = 613249
     new_pass = pw + str(ran_n)  # 'admin123'
     md5.update(new_pass.encode('utf-8'))
     print(md5.hexdigest())
-    print(ran_n)

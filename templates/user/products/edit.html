@@ -97,6 +97,17 @@ product edit
                     </div>
                   </td>
                 </tr>
+              {% elif Manu.status == 4 %}
+                <tr class="text-center" style="font-size:.75rem">
+                  <td>{{ Manu.name }}</td>
+                  <td>{{ Manu.description }}</td>
+                  <td>{{ Manu.addtime }}</td>
+                  <td>
+                    <div class="d-flex" >
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Delete</a>
+                    </div>
+                  </td>
+                </tr>
               {% elif Manu.status == 1 %}
                 <tr class="text-center" style="color:#dc3545;font-size:.75rem">
                   <td>{{ Manu.name }}</td>
@@ -127,6 +138,3 @@ product edit
 {% block modals %}
 {% endblock modals %}
 
-{% block signout_model_redirect %}
-  {% url 'mU_signin' %}
-{% endblock signout_model_redirect %}

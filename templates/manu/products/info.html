@@ -1,0 +1,22 @@
+{% extends "base/page_base_manu.html" %}
+
+{% block title %}
+Add new product
+{% endblock title %}
+
+{% block brandlink %}
+  {% url 'mM_index' m_id %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+For Manufacturer
+{% endblock brand_small %}
+
+{% block page_view %}
+<div class="container-md py-5 col-md-9">
+  <h3>Tips:</h3>
+  <p>{{info}}</p>
+  <a class="btn btn-dark" href="{% url 'mM_index' m_id %}">OK</a>
+</div>
+{% endblock page_view %}
+

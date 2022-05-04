@@ -1,10 +1,5 @@
 {% extends "base/base.html" %}
 
-{% block css %}
-{% endblock css %}
-
-{% block jshd %}
-{% endblock jshd %}
 
 {% block brandlink %}
 {% endblock brandlink %}
@@ -38,7 +33,7 @@
 <div class="row">
   {% block sidebar %}
   {% endblock sidebar %}
-  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" style="margin:0 auto; max-width:1300px">
     {% block page_view %}
     {% endblock page_view %}
   </main>
@@ -50,7 +45,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Sign out now!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -61,7 +56,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">
-          <a  style="color:#fff" href="{% block signout_model_redirect %}{% endblock signout_model_redirect %}">
+          <a  style="color:#fff" href="{% url 'mU_signout' %}">
               Sure
             </a>
         </button>

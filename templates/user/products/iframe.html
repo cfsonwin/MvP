@@ -1,23 +1,73 @@
 <!doctype html>
 {% load static %}
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/Sidebar.css'%}">
+    <style>
+        .btn_bottom {
 
+        }
+    </style>
     <title>MvP | {{ m_id }}</title>
-  </head>
-  <body>
-    {% if status == 1 %}
-      <div class="card-body bg-light">
-      <h4 class="card-text" style="margin-bottom:0px; font-size:18px">{{ info.name }}</h4>
-      <p class="card-text" style="font-size:15px">Log:</br>{{ info.description }}</p>
-      <p class="text-muted" style="font-size:15px; verticle-align:bottom">{{ info.change_msg }}</p></div>
-    {% elif status == 0 %}
-      <p>{{ info }}</p>
-    {% endif %}
-  </body>
+</head>
+<body>
+{% if status == 1 %}
+<div class="card" id="dModify">
+    <div class="card-body bg-light flex" style="padding:3px">
+        <h4 class="card-text" style="margin-bottom:.5rem; font-size:18px">{{ info.name }}</h4>
+        {% for time,log in info.log_dic.items %}
+        <p style="font-size:8px;margin-bottom:0px;">{{ time }}</p>
+        <p style="font-size:10px;margin-bottom:.5rem;">{{ log }}</p>
+        {% endfor %}
+        <p class="text-muted" style="font-size:15px; verticle-align:bottom">{{ info.change_msg }}</p>
+    </div>
+    <div class="card-footer" style="padding:3px;">
+        <button class="btn_bottom" style="text-align:center" id="gotoFeedback">View feedback</button>
+    </div>
+</div>
+<div class="card" id="dFeedback" style="display:none">
+    <div class="card-body bg-light" style="padding:3px;">
+        <h4 class="card-text" style="margin-bottom:.5rem; font-size:18px">Feedback History</h4>
+        {% for feedback,reply in feedback_dic.items %}
+        {% if status_feedback == 1 %}
+        <p style="font-size:8px;margin-bottom:0px;color:#ff6666;">{{ feedback }}</p>
+        <p style="font-size:8px;margin-bottom:.5rem;color:#009900;">{{ reply }}</p>
+        {% elif status_feedback == 0 %}
+        <p style="font-size:8px;margin-bottom:0px;">{{ feedback }}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="card-footer" style="padding:3px;">
+        <button style="text-align:center" id="gotoModify">View Modification History</button>
+    </div>
+</div>
+
+
+{% elif status == 0 %}
+<p>{{ info }}</p>
+{% endif %}
+
+<script type="text/javascript">
+
+    document.getElementById("gotoFeedback").onclick = displayFeedback;
+    document.getElementById("gotoModify").onclick = displayModify;
+
+    function displayFeedback() {
+    ddiv = document.getElementById("dFeedback")
+    ddiv.style.display='';
+    nddiv = document.getElementById("dModify")
+    nddiv.style.display='None';
+    }
+    function displayModify() {
+    ddiv = document.getElementById("dModify")
+    ddiv.style.display='';
+    nddiv = document.getElementById("dFeedback")
+    nddiv.style.display='None';
+    }
+</script>
+</body>
 </html>

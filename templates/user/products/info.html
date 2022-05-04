@@ -52,10 +52,7 @@ info
 <div class="container-md py-5 col-md-9">
   <h3>Tips:</h3>
   <p>{{info}}</p>
-  <a class="btn btn-dark" href="{% url 'mU_p_show' %}">OK</a>
+  <a class="btn btn-dark" href="{% url 'mU_p_show' u_id%}">OK</a>
 </div>
 {% endblock page_view %}
 
-{% block signout_model_redirect %}
-  {% url 'mU_signin' %}
-{% endblock signout_model_redirect %}

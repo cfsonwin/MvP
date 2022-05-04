@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css'%}"/>
+    <script type="text/javascript" src="{% static 'JS/select.js' %}"></script>
+    <script src="{% static 'jquery.slim.min.js'%}"></script>
+    <script src="{% static 'bootstrap.min.js'%}"></script>
+    <script src="{% static 'leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'leaflet/leaflet.polylineDecorator.js' %}"></script>
+</head>
+<body>
+<a href="{% url 'mT_index' %}" >Back test Homepage</a>
+    <div class="container mt-3">
+        <p>Method: {{info}}</p>
+        <p>Selected location:</p>
+        <p>{{addr}}</p>
+
+
+
+    </script>
+</body>
+</html>

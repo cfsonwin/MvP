@@ -24,7 +24,7 @@ def do_signin(request):
                 }
             return render(request, 'admin/admin_signin.html', context)
         if Ad.u_password == pw_hash_salt(request.POST['inputPassword'], Ad.pw_salt):
-            request.session['already_login'] = Ad.toDict()
+            request.session['already_login_ad'] = Ad.toDict()
             return redirect(reverse('mAD_index'))
         else:
             context = {"info": "login failed! Email account not exist or password wrong.",
@@ -40,11 +40,14 @@ def do_signin(request):
 
 
 def signin_form(request):
+    print(request.session.get('already_login_user'))
+    print(request.session.get('already_login_ad'))
+    print(request.session.get('already_login_manu'))
     return render(request, 'admin/admin_signin.html')
 
 
 def sign_out(request):
-    del request.session['already_login']
+    request.session.clear()
     return redirect(reverse('mAD_signin'))
 
 

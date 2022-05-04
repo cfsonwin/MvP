@@ -1,0 +1,140 @@
+{% extends "base/page_base_manu.html" %}
+
+{% block title %}
+feedback
+{% endblock title %}
+
+{% block brandlink %}
+  {% url 'mM_index' m_id %}
+{% endblock brandlink %}
+
+{% block brand_small %}
+For Manufacturer
+{% endblock brand_small %}
+
+
+{% block page_view %}
+<div class="alert alert-light" role="alert">
+  <a href="{% url 'mM_index' m_id %}" class="alert-link">&lt;&lt;Back to Homepage</a>
+</div>
+<div class="container-md col-md-9 mb-4">
+  {% if status == 0 %}
+  <h4>Here you can communicate with constructors.</h4>
+  <p>Just click the button below, start with give a new feedback to Constructors:</p>
+  {% elif status == 1 %}
+  <h4>Feedback history:</h4>
+  <div class="table-responsive pt-3">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr style="font-size:.75rem">
+          <th>Feedback to constructor</th>
+          <th>Reply from constructor</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for key,value in feedback_dic.items %}
+          <tr class="text-center" style="font-size:.75rem">
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif status == 2 %}
+  <h4>Feedback history:</h4>
+  <div class="table-responsive pt-3">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr style="font-size:.75rem">
+          <th>Feedback to constructor</th>
+          <th>Reply from constructor</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for key,value in feedback_dic.items %}
+          <tr class="text-center" style="font-size:.75rem">
+            <td>{{ key }}</td>
+            {% if value == '' %}
+            <td>--</td>
+            {% else %}
+            <td>{{ value }}</td>
+            {% endif %}
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div id="AddFeedback" style="display:none">
+    <form role="form" class="form-horizontal my-3" action="{% url 'mM_insert_feedback' m_id p_id %}" method="POST">
+      {% csrf_token%}
+      <div class="form-group">
+          <label for="new_feedback">New Feedback: </label>
+          <textarea class="form-control" id="new_feedback" name="new_feedback" rows="3" required></textarea>
+          <div class="valid-feedback">Looks good!</div>
+      </div>
+      <button type="submit" class="btn btn-dark">
+          Feedback
+      </button>
+      <button type="button" class="btn btn-secondary" id="add_no_feedback">Cancel</button>
+    </form>
+  </div>
+  {% if status == 0 %}
+    <button class="btn btn-link bg-light" style="color:#212529" id="add_first_feedback">
+    Get Start!
+    </button>
+  {% elif status == 1 %}
+    <button class="btn btn-link bg-light" style="color:#212529" id="add_new_feedback">
+    + Add a new Feedback
+    </button>
+  {% elif status == 2 %}
+    <button class="btn btn-link bg-light" style="color:#212529" id="add_new_feedback_disable" disabled>
+    + Add a new Feedback
+    </button>
+    <br>
+    <small style="color:#FF6666;">Noted: You need to wait for the reply from constructor, before giving a new feedback</small>
+  {% endif %}
+
+
+</div>
+
+
+<script type="text/javascript">
+  {% if status == 0 %}
+    document.getElementById("add_first_feedback").onclick = displayFeedbackAddForm;
+  {% elif status == 1 %}
+    document.getElementById("add_new_feedback").onclick = displayFeedbackAddForm;
+  {% endif %}
+  document.getElementById("add_no_feedback").onclick = displayNoFeedbackAddForm;
+  function displayFeedbackAddForm() {
+    dform = document.getElementById("AddFeedback")
+    dform.style.display='';
+  }
+  function displayNoFeedbackAddForm() {
+    dform = document.getElementById("AddFeedback")
+    dform.style.display='None';
+  }
+</script>
+<script>
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() == false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+{% endblock page_view %}
+
