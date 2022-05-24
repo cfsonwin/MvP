@@ -1,5 +1,10 @@
 {% extends "base/page_base_user.html" %}
 {% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'leaflet/leaflet.css'%}"/>
+<script src="{% static 'leaflet/leaflet.js' %}"></script>
+{% endblock css %}
+
 {% block brandlink %}
   {% url 'mU_index' u_id %}
 {% endblock brandlink %}
@@ -46,59 +51,95 @@ add new product
   -->
 </nav>
 {% endblock sidebar %}
-
+mU_p_edit_insert
 {% block page_view %}
 <div class="container-md py-5 col-md-9">
     <form role="form" class="form-horizontal needs-validation" action="{% url 'mU_p_edit_insert' u_id p_id%}" method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token%}
         <div class="form-group">
             <label for="m_name">Manufacturer name</label>
-            <input type="text" class="form-control" id="m_name" placeholder="Please entry name of the Manufacturer" name="m_name" required>
+            <input type="text" class="form-control" id="m_name" placeholder="Please entry the name here" name="m_name" required>
             <div class="valid-feedback">Looks good!</div>
         </div>
         <div class="form-group">
-            <label for="m_email">Contact Email</label>
+            <label for="m_email">Email</label>
             <input type="email" class="form-control" id="m_email" placeholder="entry email" name="m_email" required>
             <div class="valid-feedback">Looks good!</div>
         </div>
         <div class="form-group">
-            <label for="m_description">Manufacturer name</label>
-            <textarea class="form-control" id="m_description" name="m_description" placeholder="Please give a short description of this Manufacturer" rows="3">'''first time add'''</textarea>
+            <label for="m_pw">Password</label>
+            <input type="password" class="form-control" id="m_pw" placeholder="entry password" name="m_pw" required>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+            </small>
             <div class="valid-feedback">Looks good!</div>
         </div>
         <div class="form-group">
-            <label for="Address">Address</label>
-            <input type="text" class="form-control" id="Address" placeholder="Street Nr." name="Address" required>
+            <label for="m_description">Description</label>
+            <textarea class="form-control" id="m_description" name="m_description" placeholder="Please give a short description of yourself" rows="3"></textarea>
             <div class="valid-feedback">Looks good!</div>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="City">City</label>
-              <input type="text" class="form-control" id="City" placeholder="City" name="City" required>
-              <div class="valid-feedback">Looks good!</div>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="State">State</label>
-              <input type="text" class="form-control" id="State" placeholder="State" name="State" required>
-              <div class="valid-feedback">Looks good!</div>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="Zip">Zip</label>
-              <input type="text" class="form-control" id="Zip" name="Zip" required>
-              <div class="valid-feedback">Looks good!</div>
+        <div class="form-group">
+            <label for="select_method">Select one method to input your location information</label>
+            <select class="custom-select" onChange="javascript:test(this.value)" id="select_method" name="select_method" required>
+                <option id="op2" selected value="SelectFromMap">Select the location from the map </option>
+                <option id="op1"  value="AddManually">Add the Location manually</option>
+            </select>
+            <div class="invalid-feedback">
+                Please select a valid state.
             </div>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-2">
-              <label for="lat">Latitude</label>
-              <input type="text" class="form-control" id="lat" placeholder="Latitude" name="lat" required>
-              <div class="valid-feedback">Looks good!</div>
+        <div class="container_border mt-3" id="AddManually" style="display:none">
+            <div class="form-group">
+                <label for="Address">Address</label>
+                <input type="text" class="form-control" id="Address" placeholder="Street Nr." name="Address" >
+                <div class="valid-feedback">Looks good!</div>
             </div>
-            <div class="form-group col-md-2">
-              <label for="lon">Longitude</label>
-              <input type="text" class="form-control" id="lon" placeholder="Longitude" name="lon" required>
-              <div class="valid-feedback">Looks good!</div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="City">City</label>
+                  <input type="text" class="form-control" id="City" placeholder="City" name="City" >
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="State">State</label>
+                  <input type="text" class="form-control" id="State" placeholder="State" name="State" >
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="Zip">Zip</label>
+                  <input type="text" class="form-control" id="Zip" name="Zip" >
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
             </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="lat">Latitude</label>
+                  <input type="text" class="form-control" id="lat" placeholder="Latitude" name="lat" >
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="lon">Longitude</label>
+                  <input type="text" class="form-control" id="lon" placeholder="Longitude" name="lon" >
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container_border mt-3" id="SelectFromMap" style="">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="lat_fm">Latitude</label>
+                  <input type="text" value="" class="form-control" id="lat_fm" placeholder="Latitude" name="lat_fm" required>
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="lon_fm">Longitude</label>
+                  <input type="text" value="" class="form-control" id="lon_fm" placeholder="Longitude" name="lon_fm" required>
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+            </div>
+            <div id="mapid" style="width: 600px; height: 400px;" class="my-3"></div>
         </div>
         <label for="m_pid_selected">Select where this manufacturer get this product from: </label>
         <select type="text" class="selectpicker show-tick form-control mb-2" id="m_pid_selected" data-width="98%" data-first-option="false" required data-live-search="true" name="m_pid_selected">
@@ -112,25 +153,90 @@ add new product
         </button>
     </form>
 </div>
+<script type="text/javascript">
+    function test(Names){
+        if (Names=="AddManually"){
+            dform=document.getElementById("AddManually")
+            dform.style.display='';
+            nform=document.getElementById("SelectFromMap")
+            nform.style.display='none';
+            document.getElementById("lat_fm").required=false;
+            document.getElementById("lon_fm").required=false;
+            document.getElementById("Address").required=true;
+            document.getElementById("City").required=true;
+            document.getElementById("State").required=true;
+            document.getElementById("Zip").required=true;
+            document.getElementById("lat").required=true;
+            document.getElementById("lon").required=true;
+        }else if (Names=="SelectFromMap"){
+            dform=document.getElementById("SelectFromMap")
+            dform.style.display='';
+            nform=document.getElementById("AddManually")
+            nform.style.display='none';
+            document.getElementById("lat_fm").required=true;
+            document.getElementById("lon_fm").required=true;
+            document.getElementById("Address").required=false;
+            document.getElementById("City").required=false;
+            document.getElementById("State").required=false;
+            document.getElementById("Zip").required=false;
+            document.getElementById("lat").required=false;
+            document.getElementById("lon").required=false;
+        }
+
+    }
+</script>
 <script>
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
+    var mymap = L.map('mapid').setView([49.8922839,8.6396314], 9);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2ZzZ2VudCIsImEiOiJjbDFwN2N0bWQwcWxzM2JwZ3BncDdpM3JlIn0.6WZHljjw5-YB2ELfb_VW1Q', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: 'your.mapbox.access.token'
+    }).addTo(mymap);
+
+
+
+    function onMapClick(e) {
+        lat_input = document.getElementById("lat_fm")
+        lat_input.value = e.latlng.lat.toFixed(4)
+        lon_input = document.getElementById("lon_fm")
+        lon_input.value = e.latlng.lng.toFixed(4)
+    }
+
+    mymap.on('click', onMapClick);
+</script>
+
+<script>
+    (function() {
+      'use strict';
+        //document.getElementById("AddManually").selected = true;
+        //document.getElementById("SelectFromMap").selected = false;
+        //document.getElementById("lat_fm").required=false;
+        //document.getElementById("lon_fm").required=false;
+        //document.getElementById("Address").required=true;
+        //document.getElementById("City").required=true;
+        //document.getElementById("State").required=true;
+        //document.getElementById("Zip").required=true;
+        //document.getElementById("lat").required=true;
+        //document.getElementById("lon").required=true;
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
           }, false);
-        })();
-    </script>
+        });
+      }, false);
+    })();
+</script>
 {% endblock page_view %}
 
 {% block signout_model_redirect %}

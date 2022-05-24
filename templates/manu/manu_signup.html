@@ -130,87 +130,87 @@ Manufacturer
     </form>
 </div>
 <script type="text/javascript">
-        function test(Names){
-            if (Names=="AddManually"){
-                dform=document.getElementById("AddManually")
-                dform.style.display='';
-                nform=document.getElementById("SelectFromMap")
-                nform.style.display='none';
-                document.getElementById("lat_fm").required=false;
-                document.getElementById("lon_fm").required=false;
-                document.getElementById("Address").required=true;
-                document.getElementById("City").required=true;
-                document.getElementById("State").required=true;
-                document.getElementById("Zip").required=true;
-                document.getElementById("lat").required=true;
-                document.getElementById("lon").required=true;
-            }else if (Names=="SelectFromMap"){
-                dform=document.getElementById("SelectFromMap")
-                dform.style.display='';
-                nform=document.getElementById("AddManually")
-                nform.style.display='none';
-                document.getElementById("lat_fm").required=true;
-                document.getElementById("lon_fm").required=true;
-                document.getElementById("Address").required=false;
-                document.getElementById("City").required=false;
-                document.getElementById("State").required=false;
-                document.getElementById("Zip").required=false;
-                document.getElementById("lat").required=false;
-                document.getElementById("lon").required=false;
+    function test(Names){
+        if (Names=="AddManually"){
+            dform=document.getElementById("AddManually")
+            dform.style.display='';
+            nform=document.getElementById("SelectFromMap")
+            nform.style.display='none';
+            document.getElementById("lat_fm").required=false;
+            document.getElementById("lon_fm").required=false;
+            document.getElementById("Address").required=true;
+            document.getElementById("City").required=true;
+            document.getElementById("State").required=true;
+            document.getElementById("Zip").required=true;
+            document.getElementById("lat").required=true;
+            document.getElementById("lon").required=true;
+        }else if (Names=="SelectFromMap"){
+            dform=document.getElementById("SelectFromMap")
+            dform.style.display='';
+            nform=document.getElementById("AddManually")
+            nform.style.display='none';
+            document.getElementById("lat_fm").required=true;
+            document.getElementById("lon_fm").required=true;
+            document.getElementById("Address").required=false;
+            document.getElementById("City").required=false;
+            document.getElementById("State").required=false;
+            document.getElementById("Zip").required=false;
+            document.getElementById("lat").required=false;
+            document.getElementById("lon").required=false;
+        }
+
+    }
+</script>
+<script>
+    var mymap = L.map('mapid').setView([49.8922839,8.6396314], 9);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2ZzZ2VudCIsImEiOiJjbDFwN2N0bWQwcWxzM2JwZ3BncDdpM3JlIn0.6WZHljjw5-YB2ELfb_VW1Q', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: 'your.mapbox.access.token'
+    }).addTo(mymap);
+
+
+
+    function onMapClick(e) {
+        lat_input = document.getElementById("lat_fm")
+        lat_input.value = e.latlng.lat.toFixed(4)
+        lon_input = document.getElementById("lon_fm")
+        lon_input.value = e.latlng.lng.toFixed(4)
+    }
+
+    mymap.on('click', onMapClick);
+</script>
+
+<script>
+    (function() {
+      'use strict';
+        //document.getElementById("AddManually").selected = true;
+        //document.getElementById("SelectFromMap").selected = false;
+        //document.getElementById("lat_fm").required=false;
+        //document.getElementById("lon_fm").required=false;
+        //document.getElementById("Address").required=true;
+        //document.getElementById("City").required=true;
+        //document.getElementById("State").required=true;
+        //document.getElementById("Zip").required=true;
+        //document.getElementById("lat").required=true;
+        //document.getElementById("lon").required=true;
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
             }
-
-        }
-    </script>
-    <script>
-        var mymap = L.map('mapid').setView([49.8922839,8.6396314], 9);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2ZzZ2VudCIsImEiOiJjbDFwN2N0bWQwcWxzM2JwZ3BncDdpM3JlIn0.6WZHljjw5-YB2ELfb_VW1Q', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: 'mapbox/streets-v11',
-          tileSize: 512,
-          zoomOffset: -1,
-          accessToken: 'your.mapbox.access.token'
-        }).addTo(mymap);
-
-
-
-        function onMapClick(e) {
-            lat_input = document.getElementById("lat_fm")
-            lat_input.value = e.latlng.lat.toFixed(4)
-            lon_input = document.getElementById("lon_fm")
-            lon_input.value = e.latlng.lng.toFixed(4)
-        }
-
-        mymap.on('click', onMapClick);
-    </script>
-
-    <script>
-        (function() {
-          'use strict';
-            //document.getElementById("AddManually").selected = true;
-            //document.getElementById("SelectFromMap").selected = false;
-            //document.getElementById("lat_fm").required=false;
-            //document.getElementById("lon_fm").required=false;
-            //document.getElementById("Address").required=true;
-            //document.getElementById("City").required=true;
-            //document.getElementById("State").required=true;
-            //document.getElementById("Zip").required=true;
-            //document.getElementById("lat").required=true;
-            //document.getElementById("lon").required=true;
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
+            form.classList.add('was-validated');
           }, false);
-        })();
-    </script>
+        });
+      }, false);
+    })();
+</script>
 {% endblock signup_form %}

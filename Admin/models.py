@@ -1,8 +1,14 @@
 from django.db import models
 from datetime import datetime
 
-
 # Create your models here.
+"""
+All the Models class created here is a mapping to the tables in your database.
+You must ensure all attributes defined in one class have the same column name in each table.
+You can find the 'Setup' of the default database in MyProduct.settings.py.
+"""
+
+
 class Administrator(models.Model):
     admin_id = models.AutoField(primary_key=True)
     Email = models.CharField(max_length=100, unique=True)
@@ -45,7 +51,7 @@ class Product(models.Model):
     p_status = models.IntegerField(default=0)
     addtime = models.DateTimeField(default=datetime.now)
     modifytime = models.DateTimeField(default=datetime.now)
-    avatar = models.CharField(max_length=100)
+    search_id = models.CharField(max_length=40)
     description = models.TextField()
 
     class Meta:
@@ -63,6 +69,7 @@ class Manufacturer(models.Model):
     m_name = models.CharField(max_length=100)
     m_password = models.CharField(max_length=100)
     pw_salt = models.IntegerField()
+
     class Meta:
         db_table = 'Manufacturer'
 
@@ -89,5 +96,6 @@ class PMmapping(models.Model):
     status = models.IntegerField(default=0)
     feedback = models.TextField()
     producing_period = models.CharField(max_length=50)
+
     class Meta:
         db_table = 'pmmapping'

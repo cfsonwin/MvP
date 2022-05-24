@@ -24,6 +24,7 @@ urlpatterns = [
     # add new product
     path('mid?<int:m_id>/select_product', m_products.select_a_product, name='mM_p_select'),
     path('mid?<int:m_id>/select_pnode', m_products.select_a_pnode, name='mM_pnode_select'),
+    path('mid?<int:m_id>/warning', m_products.warning, name='mM_warning'),
     path('mid?<int:m_id>/add_pmmapping/p_id?<int:p_id>', m_products.add_pmmapping, name='mM_add_pmmapping'),
 
     # view

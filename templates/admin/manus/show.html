@@ -22,7 +22,7 @@ users_add
           Dashboard <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="{% url 'mAD_user' %}">
           <span data-feather="file"></span>
           Constructors
@@ -35,7 +35,7 @@ users_add
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'mAD_manu' %}">
+        <a class="nav-link active" href="{% url 'mAD_manu' %}">
           <span data-feather="file"></span>
           Manufacturers
         </a>
@@ -60,37 +60,35 @@ users_add
       </tr>
     </thead>
     <tbody>
-    {% for user in userlist %}
+    {% for manu in manulist %}
 
-        {% if user.u_status == 0 %}
+        {% if manu.m_status == 0 %}
         <tr class="text-center" style="font-size:.75rem">
-          <td>{{ user.u_id }}</td>
-          <td>{{ user.u_name }}</td>
-          <td>{{ user.Email }}</td>
+          <td>{{ manu.m_id }}</td>
+          <td>{{ manu.m_name }}</td>
+          <td>{{ manu.contact }}</td>
           <td>Normal</td>
-          <td>{{ user.addtime }}</td>
-          <td>{{ user.addr }}</td>
+          <td>{{ manu.addtime }}</td>
+          <td>{{ manu.addr }}</td>
           <td>
             <div class="d-flex" >
-              <a class=" btn btn-outline-success btn-sm mr-2" href="{% url 'mAD_edit' user.u_id %}" style="color:#212529;font-size:0.5rem">Edit</a>
-              <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mAD_del' user.u_id %}" style="color:#212529;font-size:0.5rem">Delete</a>
+              <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mAD_manu_del' manu.m_id %}" style="color:#212529;font-size:0.5rem">Delete</a>
 
             </div>
           </td>
         </tr>
 
-        {% elif user.u_status == 1 %}
+        {% elif manu.m_status == 1 %}
         <tr class="text-center" style="color:#dc3545;font-size:.75rem" >
-          <td>{{ user.u_id }}</td>
-          <td>{{ user.u_name }}</td>
-          <td>{{ user.Email }}</td>
+          <td>{{ manu.m_id }}</td>
+          <td>{{ manu.m_name }}</td>
+          <td>{{ manu.contact }}</td>
           <td>Deleted</td>
-          <td>{{ user.addtime }}</td>
-          <td>{{ user.addr }}</td>
+          <td>{{ manu.addtime }}</td>
+          <td>{{ manu.addr }}</td>
           <td>
             <div class="d-flex" >
-              <a class=" btn btn-outline-success btn-sm mr-2" href="{% url 'mAD_edit' user.u_id %}" style="color:#212529;font-size:0.5rem">Edit</a>
-              <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mAD_rec' user.u_id %}" style="color:#212529;font-size:0.5rem">Recovery</a>
+              <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mAD_manu_rec' manu.m_id %}" style="color:#212529;font-size:0.5rem">Recovery</a>
             </div>
           </td>
         </tr>
@@ -99,9 +97,6 @@ users_add
     </tbody>
   </table>
 </div>
-<a class="btn btn-link bg-light" style="color:#212529" href="{% url 'mAD_add' %}">
-  + Add new user
-</a>
 
 {% endblock page_view %}
 

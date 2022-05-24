@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 
 
+
 # from django.contrib.gis.geoip2 import GeoIP2
 
 
@@ -132,12 +133,22 @@ class Manus:
         return msg
 
 
-if __name__ == '__main__':
-    pw = 'user1234'
+def get_search_id(name, time_now):
+    new_str = name + time_now
     md5 = hashlib.md5()
-    ran_n = random.randint(100000, 999999)
-    print(ran_n)
-    ran_n = 613249
-    new_pass = pw + str(ran_n)  # 'admin123'
-    md5.update(new_pass.encode('utf-8'))
-    print(md5.hexdigest())
+    md5.update(new_str.encode('utf-8'))
+    return md5.hexdigest()
+
+
+if __name__ == '__main__':
+    # for i in range(20):
+    #     pw = 'manu1234'
+    #     md5 = hashlib.md5()
+    #     ran_n = random.randint(100000, 999999)
+    #     print(ran_n)
+    #     # ran_n = 613249
+    #     new_pass = pw + str(ran_n)  # 'admin123'
+    #     md5.update(new_pass.encode('utf-8'))
+    #     print(md5.hexdigest())
+    # i += 1
+    print(get_search_id("test product 0411", "2022-04-10 18:49:26"))
