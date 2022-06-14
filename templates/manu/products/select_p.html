@@ -17,17 +17,70 @@ For Manufacturer
 <div class="container-md py-5 col-md-9">
     <form role="form" class="form-horizontal needs-validation" action="{% url 'mM_pnode_select' m_id %}" method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token%}
-        <h4>Please select a product manufactured by you</h4>
-        <select type="text" class="selectpicker show-tick form-control mt-3" id="p_selected" data-width="98%" data-first-option="false" required data-live-search="true" name="p_selected">
-          {% for product in products %}
-            <option value="{{product.p_id}}">{{product.p_name}}</option>
-          {% endfor %}
+        <h4>Please select a method to add a product:</h4>
+        <select type="text" onChange="javascript:test(this.value)" class="selectpicker show-tick form-control mt-3" id="method_selected" data-width="98%" data-first-option="false" required data-live-search="true" name="mM_pnode_select">
+            <option selected value="select_by_name">Add a public product by name</option>
+            <option value="select_by_searchID">Add a private product by search ID</option>
         </select>
+
+        <div style="" id="SelectByName" class="mt-3">
+            <select type="text" class="selectpicker show-tick form-control mt-3" id="p_selected" data-width="98%" data-first-option="false" required data-live-search="true" name="p_selected">
+              {% for product in products %}
+                <option value="{{product.p_id}}">{{product.p_name}}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div style="display: none" id="SelectByID" class="mt-3">
+            <div class="form-group">
+                <label for="p_search_id" class="h6">Search ID</label>
+                <input class="form-control" id="p_search_id" name="p_search_id">
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+        </div>
+
         <button type="submit" class="mt-3 btn btn-dark">
             Continue
         </button>
     </form>
 </div>
+<script type="text/javascript">
+    function test(Names){
+        if (Names=="select_by_name"){
+            dform=document.getElementById("SelectByName")
+            dform.style.display='';
+            nform=document.getElementById("SelectByID")
+            nform.style.display='none';
+            document.getElementById("p_search_id").required=false;
+            document.getElementById("p_selected").required=true;
+        }else if (Names=="select_by_searchID"){
+            dform=document.getElementById("SelectByID")
+            dform.style.display='';
+            nform=document.getElementById("SelectByName")
+            nform.style.display='none';
+            document.getElementById("p_search_id").required=true;
+            document.getElementById("p_selected").required=false;
+        }
 
+    }
+</script>
+<script>
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+</script>
 {% endblock page_view %}
 

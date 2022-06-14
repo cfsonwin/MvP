@@ -155,11 +155,65 @@ product edit
           <label for="p_discription" class="h5">Product description</label>
           <textarea class="form-control" id="p_discription" name="p_discription"  rows="3">{{edit_product.description}}</textarea>
         </div>
-        <button type="submit" class="btn btn-dark" data-toggle="modal" data-target="#ConfirmEdit">
+        <div>
+            <label class="h5">Product status: </label>
+            </br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="ProductStatus" id="status1" value="private" required checked>
+              <label class="form-check-label" for="status1">1. Private</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="ProductStatus" id="status2" value="public" required>
+              <label class="form-check-label" for="status2">2. Public</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-dark mt-3" data-toggle="modal" data-target="#ConfirmEdit">
             Submit
         </button>
     </form>
 </div>
+
+<script>
+    var status = Number({{edit_product.p_status}});
+    console.log(status);
+    if(status == 0){
+        dform1=document.getElementById("status1");
+        dform1.checked=true;
+        dform2=document.getElementById("status2");
+        dform2.checked=false;
+    }else if(status == 1){
+        dform1=document.getElementById("status2");
+        dform1.checked=true;
+        dform2=document.getElementById("status1");
+        dform2.checked=false;
+    }else{
+        dform1=document.getElementById("status2");
+        dform1.checked=false;
+        dform2=document.getElementById("status1");
+        dform2.checked=false;
+    }
+</script>
+
+<script>
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+</script>
 {% endblock page_view %}
 
 {% block modals %}

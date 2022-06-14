@@ -9,12 +9,23 @@ from django.urls import reverse
 from Admin.models import User, CPmapping, Product, PMmapping, Manufacturer
 from Admin.utils import pw_hash_salt
 
-
 # Create your views here.
+"""
+Here are all the functions for rendering:
+    User Login/Logout;
+    User Sign up;
+    User Homepage;
+"""
+
+
 def u_redirect(request):
     return redirect(reverse('mU_signin'))
 
+
 def reply_form(request, u_id, pm_id):
+    """
+    Direct to the webpage for add a reply
+    """
     pm_record = PMmapping.objects.get(id=pm_id)
     m = Manufacturer.objects.get(m_id=pm_record.m_id)
     user = User.objects.get(u_id=u_id)
@@ -27,6 +38,7 @@ def reply_form(request, u_id, pm_id):
 
     return render(request, 'user/add_reply.html', context)
 
+
 def mU_reply_insert(request, u_id, pm_id):
     pm_record = PMmapping.objects.get(id=pm_id)
     reply = request.POST.get('fb_reply')
@@ -38,6 +50,7 @@ def mU_reply_insert(request, u_id, pm_id):
     pm_record.feedback = new_feedback
     pm_record.save()
     return redirect(reverse('mU_index', kwargs={'u_id': u_id}))
+
 
 def index(request, u_id):
     user = User.objects.get(u_id=u_id)

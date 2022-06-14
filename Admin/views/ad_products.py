@@ -1,11 +1,12 @@
-import folium
 from django.shortcuts import render
 
 from Admin.models import Product, CPmapping, User, PMmapping, Manufacturer
 from Admin.utils import get_center_coor, Manus, LineInfo
 
-
 # Create your views here.
+from User.utils import get_centroid
+
+
 def show_all(request):
     product = Product.objects
     p_list = product.all()
@@ -40,54 +41,65 @@ def get_loc_dict(manufacturers):
     return line_dic, loc_dic
 
 
-def show_details(request, p_id=0):
+def show_details_2(request, p_id=0):
     product = Product.objects.get(p_id=p_id)
     owners = CPmapping.objects.filter(p_id=p_id)
+    valid_status = [0, 4]
+    need_valid_status = [2]
+    no_valid_status = [1]
+    manufacturers_valid = PMmapping.objects.filter(p_id=p_id).filter(status__in=valid_status)
+    manufacturers_need_valid = PMmapping.objects.filter(p_id=p_id).filter(status__in=need_valid_status)
+    manufacturers_no_valid = PMmapping.objects.filter(p_id=p_id).filter(status__in=no_valid_status)
     manufacturers = PMmapping.objects.filter(p_id=p_id)
-    # for i in range(1, 10):
-    #     try:
-    #         print(Product.objects.get(p_id=i))
-    #     except:
-    #         print('no such record from id = %d' % i)
-    #         break
-
     u_list = []
-    m_list_0 = []
-    m_list = []
-    parent_list = []
     try:
+        class Info:
+            def __init__(self, loc, p_id):
+                self.loc = loc
+                self.p_id = p_id
+
         for owner in owners:
             u_list.append(owner.c_id)
-        line_dic, loc_dic = get_loc_dict(manufacturers)
-        m = folium.Map(width='100%', height='100%', location=get_center_coor(), zoom_start=8)
-        for key in loc_dic.keys():
-            info = loc_dic[key]
-            iframe = folium.IFrame(
-                '''<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"></head><body><div class="card-body bg-light"><h4 class="card-text" style="margin-bottom:0px; font-size:18px">%s</h4><p class="card-text" style="font-size:15px">Log:</br>%s</p><p class="text-muted" style="font-size:15px; verticle-align:bottom">%s</p></div></body>'''
-                % (info.name, info.description, info.change_msg))
-            popup = folium.Popup(iframe, min_width=400, max_width=400)
-            folium.Marker([info.lat, info.lon], tooltip='click here for more',
-                          popup=popup,
-                          icon=folium.Icon(color='purple')).add_to(m)
+        line_dic_need_valid, loc_dic_need_valid = get_loc_dict(manufacturers_need_valid)
+        line_dic_no_valid, loc_dic_no_valid = get_loc_dict(manufacturers_no_valid)
+        line_dic, loc_dic = get_loc_dict(manufacturers_valid)
+        line_dic_all, loc_dic_all = get_loc_dict(manufacturers)
         users = User.objects.filter(u_id__in=u_list)
-        m_info = []
-        m_html = m._repr_html_()
-        for item in m_list_0:
-            m_info.append(" name: %s, direct get from product constructor" % item)
-        for i in range(len(m_list)):
-            m_info.append(" name: %s, get from %s" % (m_list[i], parent_list[i]))
-        print(m_info)
-        context = {'product': product,
-                   'owners': users,
-                   'm_info': m_info,
-                   'map': m_html,
-                   'add_status': 1}
+        user_dic = {}
+        for user in users:
+            first_name = user.u_name.split('/')[0]
+            family_name = user.u_name.split('/')[1]
+            user_dic['%s %s' % (first_name, family_name)] = user.Email
+        if len(loc_dic.keys()) == 0:
+            lat = 49.861252
+            lon = 8.682602
+            zoom_index = 6
+        else:
+            latlon, zoom_index = get_centroid(loc_dic_all)
+            lat = latlon[0]
+            lon = latlon[1]
+        context = {'loc_dic': loc_dic,
+                   'p_id': p_id,
+                   'user_dic': user_dic,
+                   'lat': lat,
+                   'lon': lon,
+                   'line_dic': line_dic,
+                   'zoom_index': zoom_index,
+                   'add_status': 1,
+                   'product': product,
+                   'line_dic_need_valid': line_dic_need_valid,
+                   'loc_dic_need_valid': loc_dic_need_valid,
+                   'line_dic_no_valid': line_dic_no_valid,
+                   'loc_dic_no_valid': loc_dic_no_valid,
+                   }
 
     except Exception as err:
         print('***************')
         print(err)
         context = {'info': "Showing information for product %s failed, Please try again." % product.p_name,
-                   'add_status': 0}
+                   'p_id': p_id,
+                   'add_status': 0,
+                   }
     return render(request, 'admin/products/view.html', context)
 
 

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from Admin.views import ad_index, ad_users, ad_products
+from Admin.views import ad_index, ad_users, ad_products, ad_manus
 
 urlpatterns = [
     # homepage
@@ -30,9 +30,14 @@ urlpatterns = [
     path('user/edit/<int:u_id>', ad_users.edit, name='mAD_edit'),
     path('user/update/<int:u_id>', ad_users.updated, name='mAD_update'),
 
+    # manufacturer urls
+    path('manu/', ad_manus.show_manu, name='mAD_manu'),
+    path('manu/del/<int:m_id>', ad_manus.delete, name='mAD_manu_del'),
+    path('manu/recovery/<int:m_id>', ad_manus.recovery, name='mAD_manu_rec'),
+
     # product
     path('product/', ad_products.show_all, name='mAD_p_show'),
-    path('product/view/<int:p_id>', ad_products.show_details, name='mAD_p_view'),
+    path('product/view/<int:p_id>', ad_products.show_details_2, name='mAD_p_view'),
     path('product/edit/<int:p_id>', ad_products.edit, name='mAD_p_edit'),
     path('product/update/<int:p_id>', ad_products.updated, name='mAD_p_update'),
 

@@ -1,11 +1,15 @@
+import hashlib
+import random
+import re
 from datetime import datetime
 
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from geopy import Nominatim
 
 from Admin.models import Product, CPmapping, User, PMmapping, Manufacturer
-from Admin.utils import Manus, LineInfo
+from Admin.utils import Manus, LineInfo, get_search_id
 from User.utils import get_centroid
 
 
@@ -257,6 +261,12 @@ def updated(request, u_id, p_id):
         edit_name = request.POST['p_name']
         edit_product.description = edit_discription
         edit_product.p_name = edit_name
+        if request.POST['ProductStatus'] == 'private':
+            edit_product.p_status = 0
+        elif request.POST['ProductStatus'] == 'public':
+            edit_product.p_status = 1
+        else:
+            return Http404
         edit_product.save()
         context = {'info': "description for Product %s has been successfully updated" % edit_product.p_name,
                    'update_status': 1,
@@ -298,8 +308,16 @@ def insert_new_product(request, u_id):
         p_description = request.POST['p_description']
         new_product.p_name = p_name
         new_product.description = p_description
-        new_product.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_product.u_status = 0
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_product.addtime = time_now
+        if request.POST['ProductStatus'] == 'private':
+            new_product.p_status = 0
+        elif request.POST['ProductStatus'] == 'public':
+            new_product.p_status = 1
+        else:
+            msg.append("please select a valid status for your product.")
+        search_id = get_search_id(p_name, time_now)
+        new_product.search_id = search_id
         if len(msg) == 0:
             new_product.save()
             new_p = Product.objects.get(p_name=p_name)
@@ -308,6 +326,7 @@ def insert_new_product(request, u_id):
                        'u_id': u_id,
                        'new_product': new_p,
                        'name': hi_name,
+                       'search_id': search_id,
                        }
         else:
             context = {'info': msg,
@@ -361,8 +380,7 @@ def add_new_manu_select(request, u_id, p_id):
 def add_new_manu(request, u_id, p_id):
     user_hi = User.objects.get(u_id=u_id)
     hi_name = user_hi.u_name.split('/')[0]
-    # selected_method = int(request.POST['add_method_selected'])
-    selected_method = 1
+    selected_method = int(request.POST['add_method_selected'])
     M_list_all = Manufacturer.objects.all()
     manufacturers = PMmapping.objects.filter(p_id=p_id)
     products = CPmapping.objects.filter(c_id=u_id)
@@ -396,35 +414,57 @@ def insert_new_manu(request, u_id, p_id):
     user_hi = User.objects.get(u_id=u_id)
     hi_name = user_hi.u_name.split('/')[0]
     try:
+        m_pnode = int(request.POST['m_pid_selected'])
+        m_name = request.POST['m_name']
         msg = []
         new_manu = Manufacturer()
-        if len(Manufacturer.objects.filter(m_name=request.POST['m_name'])) != 0:
-            msg.append('This Manufacturer is exist!')
-        m_name = request.POST['m_name']
-        new_manu.m_name = m_name
-        m_description = request.POST['m_description']
-        new_manu.description = m_description
-        new_manu.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        new_manu.m_name = request.POST['m_name']
+        if len(Manufacturer.objects.filter(contact=request.POST['m_email'])) != 0:
+            msg.append('This Email address is not available')
+
         new_manu.contact = request.POST['m_email']
-        addr = '%s, %s, %s, %s' % (
-            request.POST['Address'],
-            request.POST['Zip'],
-            request.POST['City'],
-            request.POST['State']
-        )
-        new_manu.addr = addr
-        loc = '%s,%s' % (
-            request.POST['lat'],
-            request.POST['lon']
-        )
-        new_manu.loc = loc
-        m_pnode = int(request.POST['m_pid_selected'])
-        exist_m = PMmapping.objects.filter(p_id=p_id)
-        m_id_list = []
-        for m in exist_m:
-            m_id_list.append(int(m.m_id))
-        if (m_pnode not in m_id_list) and m_pnode != 0:
-            msg.append('This parent node not exist!')
+        new_manu.description = request.POST['m_description']
+        md5 = hashlib.md5()
+        ran_n = random.randint(100000, 999999)
+        new_pass = request.POST['m_pw'] + str(ran_n)
+        md5.update(new_pass.encode('utf-8'))
+        pattern = re.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$")
+        if not pattern.match(request.POST['m_pw']):
+            msg.append('Your password must be 8-20 characters long, contain letters and numbers')
+        new_manu.m_password = md5.hexdigest()
+        new_manu.pw_salt = ran_n
+        # two method for addr add
+        print(request.POST['select_method'])
+        if request.POST['select_method'] == "AddManually":
+            addr = '%s, %s, %s, %s' % (
+                request.POST['Address'],
+                request.POST['Zip'],
+                request.POST['City'],
+                request.POST['State']
+            )
+            new_manu.addr = addr
+            loc = '%s,%s' % (
+                request.POST['lat'],
+                request.POST['lon']
+            )
+            new_manu.loc = loc
+        elif request.POST['select_method'] == "SelectFromMap":
+            geolocator = Nominatim(user_agent="get_location")
+            latitude = request.POST['lat_fm']
+            longitude = request.POST['lon_fm']
+            loc = '%s,%s' % (
+                latitude,
+                longitude
+            )
+            new_manu.loc = loc
+            location = geolocator.reverse((latitude, longitude))
+            addr = location.address
+            new_manu.addr = addr
+        else:
+            msg.append('Error occurred by getting location')
+        new_manu.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_manu.m_status = 0
         if len(msg) == 0:
             new_manu.save()
             new_m = Manufacturer.objects.get(m_name=m_name)

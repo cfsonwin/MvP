@@ -9,7 +9,7 @@ Manage your own Virtual Products
 {% endblock brand_small %}
 
 {% block title %}
-users_recovery
+info
 {% endblock title %}
 
 {% block sidebar %}
@@ -22,7 +22,7 @@ users_recovery
           Dashboard <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="{% url 'mAD_user' %}">
           <span data-feather="file"></span>
           Constructors
@@ -35,7 +35,7 @@ users_recovery
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'mAD_manu' %}">
+        <a class="nav-link active" href="{% url 'mAD_manu' %}">
           <span data-feather="file"></span>
           Manufacturers
         </a>
@@ -46,19 +46,11 @@ users_recovery
 {% endblock sidebar %}
 
 {% block page_view %}
-  {% if add_status == 0 %}
-    <div class="container-md py-5 col-md-9">
-      <h3>Tips:</h3>
-      <p>{{info}}</p>
-      <a class="btn btn-dark" href="{% url 'mAD_user' %}">Retry</a>
-    </div>
-  {% elif add_status == 1 %}
-    <div class="container-md py-5 col-md-9">
-      <h3>Tips:</h3>
-      <p>{{info}}</p>
-      <a class="btn btn-dark" href="{% url 'mAD_user' %}">Continue</a>
-    </div>
-  {% endif %}
+<div class="container-md py-5 col-md-9">
+  <h3>Tips:</h3>
+  <p>{{info}}</p>
+  <a class="btn btn-dark" href="{% url 'mAD_user' %}">OK</a>
+</div>
 {% endblock page_view %}
 
 {% block signout_model_redirect %}

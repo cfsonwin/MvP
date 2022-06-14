@@ -12,7 +12,7 @@ def select_a_product(request, m_id):
     owned_p = PMmapping.objects.filter(m_id=m_id)
     for p in owned_p:
         p_id_list.append(p.p_id)
-    products = Product.objects.all().exclude(p_id__in=p_id_list)
+    products = Product.objects.filter(p_status=1).exclude(p_id__in=p_id_list)
     context = {
         'm_id': m_id,
         'products': products,
@@ -20,19 +20,47 @@ def select_a_product(request, m_id):
     return render(request, 'manu/products/select_p.html', context)
 
 
-def select_a_pnode(request, m_id):
-    p_id = request.POST['p_selected']
-    pnode_list = []
-    pnodes = PMmapping.objects.filter(p_id=p_id)
-    for p in pnodes:
-        pnode_list.append(p.m_id)
-    Manus = Manufacturer.objects.filter(m_id__in=pnode_list)
+def warning(request, m_id):
     context = {
-        'manus': Manus,
-        'm_id': m_id,
-        'p_id': p_id,
+        "info": "Please don't add again!",
+        "m_id": m_id,
     }
-    return render(request, 'manu/products/select_pnode.html', context)
+    return render(request, 'manu/products/info.html', context)
+
+
+def select_a_pnode(request, m_id):
+    try:
+        if request.POST["mM_pnode_select"] == "select_by_name":
+            p_id = request.POST['p_selected']
+        elif request.POST["mM_pnode_select"] == "select_by_searchID":
+            search_id = request.POST["p_search_id"]
+            product = Product.objects.get(search_id=search_id)
+            p_id = product.p_id
+            this_p_pm_record = PMmapping.objects.filter(p_id=p_id)
+            for pm_record in this_p_pm_record:
+                if int(pm_record.m_id) == int(m_id):
+                    return redirect(reverse('mM_warning', kwargs={'m_id': m_id}))
+        pnode_list = []
+        pnodes = PMmapping.objects.filter(p_id=p_id)
+        for p in pnodes:
+            pnode_list.append(p.m_id)
+        Manus = Manufacturer.objects.filter(m_id__in=pnode_list)
+        context = {
+            'manus': Manus,
+            'm_id': m_id,
+            'p_id': p_id,
+        }
+
+        return render(request, 'manu/products/select_pnode.html', context)
+    except Exception as err:
+        print('***************')
+        print(err)
+        context = {'info': "Search ID not exist, Try again later",
+                   'm_id': m_id,
+                   }
+        return render(request, 'manu/products/info.html', context)
+
+
 
 
 def add_pmmapping(request, m_id, p_id):
