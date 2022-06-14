@@ -115,6 +115,12 @@ def addProducingPeriod(request, m_id, p_id):
     return redirect(reverse('mM_view', kwargs={'m_id': m_id, 'p_id': p_id}))
 
 
+def mStatusUpdate(request, m_id, p_id):
+    pm_record = PMmapping.objects.filter(m_id=m_id).get(p_id=p_id)
+    pm_record.m_status = request.POST.get('update_status')
+    pm_record.save()
+    return redirect(reverse('mM_view', kwargs={'m_id': m_id, 'p_id': p_id}))
+
 def feedback(request, m_id, p_id):
     pm_record = PMmapping.objects.filter(m_id=m_id).get(p_id=p_id)
     feedback = pm_record.feedback

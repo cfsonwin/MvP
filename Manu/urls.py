@@ -32,7 +32,8 @@ urlpatterns = [
     path('mid?<int:m_id>/view/add_log_for_p_id?<int:p_id>', m_products.add_log, name='mM_addlog'),
     path('mid?<int:m_id>/view/add_ProducingPeriod_for_p_id?<int:p_id>', m_products.addProducingPeriod,
          name='mM_addProducingPeriod'),
-
+    path('mid?<int:m_id>/view/mStatusUpdate_for_p_id?<int:p_id>', m_products.mStatusUpdate,
+         name='mM_StatusUpdate'),
     # feedback
     path('mid?<int:m_id>/feedback/p_id?<int:p_id>', m_products.feedback, name='mM_feedback'),
     path('mid?<int:m_id>/feedback/insert/p_id?<int:p_id>', m_products.insert_feedback, name='mM_insert_feedback'),

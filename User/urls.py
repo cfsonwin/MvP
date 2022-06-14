@@ -31,7 +31,6 @@ urlpatterns = [
     path('uid?<int:u_id>/product/add', products.add_new_product, name='mU_p_add'),
     path('uid?<int:u_id>/product/insert', products.insert_new_product, name='mU_p_insert'),
     path('uid?<int:u_id>/product/insert?p_id=<int:p_id>', products.insert_cpmapping, name='mU_p_insert_cpmapping'),
-    #path('uid?<int:u_id>/product/view/<int:p_id>', products.show_details, name='mU_p_view'),
     path('uid?<int:u_id>/product/view2/<int:p_id>', products.show_details_2, name='mU_p_view2'),
     path('uid?<int:u_id>/product/view2/<int:p_id>?<int:m_id>', products.iframe, name='mU_p_iframe'),
     path('uid?<int:u_id>/product/jumpto', products.jump_to, name='mU_p_jumpto'),
@@ -46,8 +45,13 @@ urlpatterns = [
     path('uid?<int:u_id>/product/update/<int:p_id>', products.updated, name='mU_p_update'),
     # product edit
     path('uid?<int:u_id>/product/edit/<int:p_id>', products.edit, name='mU_p_edit'),
-    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:id>/del', products.pm_delete, name='mU_p_delete'),
-    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:id>/recovery', products.pm_recovery, name='mU_p_recovery'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:pm_id>/del', products.pm_delete, name='mU_p_delete'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:pm_id>/right_update', products.right_update,
+         name='mU_p_right_update'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:pm_id>/right_updated', products.right_updated,
+         name='mU_p_right_updated'),
+    path('uid?<int:u_id>/product/edit/<int:p_id>/pmmappingid?<int:pm_id>/recovery', products.pm_recovery,
+         name='mU_p_recovery'),
 
     # Sign in
     path('signin/', index.signin_form, name='mU_signin'),

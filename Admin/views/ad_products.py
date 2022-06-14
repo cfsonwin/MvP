@@ -20,15 +20,9 @@ def get_loc_dict(manufacturers):
         if manufacturer.m_pnode == 0:
             this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
             loc_dic[this_manu.m_id] = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Direct get from product constructor",
-                manufacturer.producing_period,
-                this_manu.addr
             )
         elif manufacturer.m_pnode != 0:
             this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
@@ -39,15 +33,9 @@ def get_loc_dict(manufacturers):
             line = LineInfo(lat, lon, lat_p, lon_p)
             line_dic[this_manu.m_id] = line
             loc_dic[this_manu.m_id] = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Get from %s" % Manufacturer.objects.get(m_id=manufacturer.m_pnode).m_name,
-                manufacturer.producing_period,
-                this_manu.addr
             )
     return line_dic, loc_dic
 

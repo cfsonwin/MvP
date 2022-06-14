@@ -114,6 +114,8 @@ def index(request, u_id):
                     break
                 i += 1
         feedback_table_list.append([id, _p_id, _p_name, _m_name, new_feedback])
+    if len(add_year_list) == 0:
+        add_year_list = [[0, 0]]
     data = np.array(add_year_list)
     data = data[np.argsort(data[:, 0])]
     sum_dict = {}
@@ -202,7 +204,8 @@ def signin_form(request):
 
 
 def sign_out(request):
-    request.session.clear()
+    # request.session.clear()
+    del request.session['already_login_user']
     return redirect(reverse('mU_signin'))
 
 
@@ -237,7 +240,6 @@ def signup_check(request):
         )
         new_user.addr = addr
         new_user.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_user.modifytime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_user.u_status = 0
         if len(msg) == 0:
             new_user.save()

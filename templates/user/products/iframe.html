@@ -19,6 +19,7 @@
 <div class="card" id="dModify">
     <div class="card-body bg-light flex" style="padding:3px">
         <h4 class="card-text" style="margin-bottom:.5rem; font-size:18px">{{ info.name }}</h4>
+        <small>{{loca}}</small>
         {% for time,log in info.log_dic.items %}
         <p style="font-size:8px;margin-bottom:0px;">{{ time }}</p>
         <p style="font-size:10px;margin-bottom:.5rem;">{{ log }}</p>
@@ -33,12 +34,19 @@
     <div class="card-body bg-light" style="padding:3px;">
         <h4 class="card-text" style="margin-bottom:.5rem; font-size:18px">Feedback History</h4>
         {% for feedback,reply in feedback_dic.items %}
-        {% if status_feedback == 1 %}
-        <p style="font-size:8px;margin-bottom:0px;color:#ff6666;">{{ feedback }}</p>
-        <p style="font-size:8px;margin-bottom:.5rem;color:#009900;">{{ reply }}</p>
-        {% elif status_feedback == 0 %}
-        <p style="font-size:8px;margin-bottom:0px;">{{ feedback }}</p>
-        {% endif %}
+            {% if status_feedback == 1 %}
+                <p style="font-size:8px;margin-bottom:0px;color:#ff6666;">{{ feedback }}</p>
+                <p style="font-size:8px;margin-bottom:.5rem;color:#009900;">{{ reply }}</p>
+            {% elif status_feedback == 2 %}
+                <p style="font-size:8px;margin-bottom:0px;color:#ff6666;">{{ feedback }}</p>
+                {% if value == '' %}
+                    <p style="font-size:8px;margin-bottom:.5rem;color:#009900;">--</p>
+                {% else %}
+                    <p style="font-size:8px;margin-bottom:.5rem;color:#009900;">{{ reply }}</p>
+                {% endif %}
+            {% elif status_feedback == 0 %}
+                <p style="font-size:8px;margin-bottom:0px;">{{ feedback }}</p>
+            {% endif %}
         {% endfor %}
     </div>
     <div class="card-footer" style="padding:3px;">

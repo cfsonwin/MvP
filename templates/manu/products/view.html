@@ -69,6 +69,27 @@ For Manufacturer
   + Add new Modification Log
   </button>
   <hr />
+  <div id="Status" class="">
+    <form role="form" class="form-horizontal" action="{% url 'mM_StatusUpdate' m_id product.p_id %}" method="POST">
+      {% csrf_token%}
+      <label for="update_status" class="h4">Producing status: </label>
+      <div class="container">
+        <div class="row row-cols-3">
+        <div class="col">Preparing</div>
+        <div class="col text-center">Manufacturing</div>
+        <div class="col text-right">Distributing</div>
+      </div>
+    </div>
+      <div class="col-auto">
+        <input type="range" class="custom-range" min="0" max="2" id="update_status" name="update_status" value="{{ pm_record.m_status }}">
+      </div>
+      <button type="submit" class="btn btn-dark mt-2">
+        Update
+      </button>
+
+    </form>
+  </div>
+  <hr />
   <div id="ProducingPeriod" class="">
     <form role="form" class="form-horizontal" action="{% url 'mM_addProducingPeriod' m_id product.p_id %}" method="POST">
       {% csrf_token%}

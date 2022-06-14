@@ -80,8 +80,8 @@ def signin_form(request):
 
 
 def sign_out(request):
-    request.session.clear()
-
+    # request.session.clear()
+    del request.session['already_login_manu']
     return redirect(reverse('mM_signin'))
 
 

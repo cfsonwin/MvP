@@ -56,24 +56,27 @@ class LineInfo:
 
 
 class Manus:
-    def __init__(self, name, loc, status, addtime, modify_time, modify_log, parent_info, producing_period, addr):
-        self.name = name
-        self.lat = loc.split(',')[0]
-        self.lon = loc.split(',')[1]
-        self.status = status
-        self.modify_time = modify_time
-        self.addtime = addtime
+    def __init__(self, this_manu, manufacturer, parent_info):
+        self.pm_id = manufacturer.id
+        self.name = this_manu.m_name
+        self.lat = this_manu.loc.split(',')[0]
+        self.lon = this_manu.loc.split(',')[1]
+        self.status = manufacturer.status
+        self.modify_time = manufacturer.modify_time
+        self.addtime = manufacturer.add_time
         if self.modify_time == self.addtime:
             self.change_st = 0
             self.change_msg = 'No Modification'
         else:
             self.change_st = 1
             self.change_msg = self.get_time_diff()
-        self.description = modify_log
+        self.description = manufacturer.modify_log
         self.parent_info = parent_info
         self.log_dic = self.get_modify_log()
-        self.addr = self.get_addr(addr)
-        self.producing_period = producing_period
+        self.addr = self.get_addr(this_manu.addr)
+        self.producing_period = manufacturer.producing_period
+        self.m_status = self.status_transfer(manufacturer.m_status)
+        self.m_right = self.right_transfer(manufacturer.access_right)
 
     def get_addr(self, addr):
         addr_arr = addr.split(',')
@@ -90,6 +93,14 @@ class Manus:
             addr = addr
         return addr
 
+    def right_transfer(self, m_right):
+        return_list = ['---', '--x', '-w-', '-wx', 'r--', 'r-x', 'rw-', 'rwx']
+        return return_list[int(m_right)]
+
+    def status_transfer(self, m_status):
+        return_list = ['Preparing', 'Manufacturing', 'Distributing']
+        return return_list[int(m_status)]
+
     def get_modify_log(self):
         log = self.description
         log_dic = {}
@@ -105,13 +116,10 @@ class Manus:
     def get_time_diff(self):
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         modifytime = self.modify_time.strftime("%Y-%m-%d %H:%M:%S")
-        # print(modifytime.split(' ')[0].split('-')[0])
         year_diff = int(time_now.split(' ')[0].split('-')[0]) - int(modifytime.split(' ')[0].split('-')[0])
         month_diff = int(time_now.split(' ')[0].split('-')[1]) - int(modifytime.split(' ')[0].split('-')[1])
         day_diff = int(time_now.split(' ')[0].split('-')[2]) - int(modifytime.split(' ')[0].split('-')[2])
         hour_diff = int(time_now.split(' ')[1].split(':')[0]) - int(modifytime.split(' ')[1].split(':')[0])
-        # min_diff = int(time_now.split(' ')[1].split(':')[1]) - int(modifytime.split(' ')[1].split(':')[1])
-        # sec_diff = int(time_now.split(' ')[1].split(':')[2]) - int(modifytime.split(' ')[1].split(':')[2])
         if year_diff > 1:
             msg = 'Last Modification: %d years ago' % year_diff
         elif year_diff == 1:

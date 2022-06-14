@@ -16,7 +16,7 @@ class ManuLoginMiddleware:
         # if already login
         urllist = ['/manu/signin/', '/manu/dosignin/', '/manu/signout/', '/manu/signup/', '/manu/signupcheck/']
         if re.match(r'^/manu', request.path) and (request.path not in urllist):
-            if 'already_login_manu' not in request.session:
+            if ('already_login_manu' not in request.session) or (request.path == '/manu'):
                 return redirect(reverse('mM_signin'))
         response = self.get_response(request)
         # Code to be executed for each request/response after

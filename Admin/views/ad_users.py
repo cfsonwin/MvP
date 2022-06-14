@@ -57,7 +57,7 @@ def insert(request):
         )
         new_user.addr = addr
         new_user.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_user.modifytime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         new_user.u_status = 0
         if len(msg) == 0:
             new_user.save()

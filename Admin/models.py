@@ -11,7 +11,7 @@ class Administrator(models.Model):
     pw_salt = models.IntegerField()
     u_status = models.IntegerField(default=0)
     addtime = models.DateTimeField(default=datetime.now)
-    modifytime = models.DateTimeField(default=datetime.now)
+
 
     def toDict(self):
         return {'id': self.admin_id,
@@ -31,10 +31,8 @@ class User(models.Model):
     pw_salt = models.IntegerField()
     u_status = models.IntegerField(default=0)
     addtime = models.DateTimeField(default=datetime.now)
-    modifytime = models.DateTimeField(default=datetime.now)
-    # avatar = models.CharField(max_length=100)
     addr = models.CharField(max_length=100)
-
+    loc = models.CharField(max_length=100)
     class Meta:
         db_table = 'Constructor'
 
@@ -44,8 +42,6 @@ class Product(models.Model):
     p_name = models.CharField(max_length=50, default="virtual product")
     p_status = models.IntegerField(default=0)
     addtime = models.DateTimeField(default=datetime.now)
-    modifytime = models.DateTimeField(default=datetime.now)
-    avatar = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
@@ -89,5 +85,7 @@ class PMmapping(models.Model):
     status = models.IntegerField(default=0)
     feedback = models.TextField()
     producing_period = models.CharField(max_length=50)
+    m_status = models.IntegerField(default=0)
+    access_right = models.IntegerField(default=4)
     class Meta:
         db_table = 'pmmapping'

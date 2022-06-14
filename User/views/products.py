@@ -16,15 +16,9 @@ def get_loc_dict(manufacturers):
         if manufacturer.m_pnode == 0:
             this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
             loc_dic[this_manu.m_id] = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Direct get from product constructor",
-                manufacturer.producing_period,
-                this_manu.addr
             )
         elif manufacturer.m_pnode != 0:
             this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
@@ -35,15 +29,9 @@ def get_loc_dict(manufacturers):
             line = LineInfo(lat, lon, lat_p, lon_p)
             line_dic[this_manu.m_id] = line
             loc_dic[this_manu.m_id] = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Get from %s" % Manufacturer.objects.get(m_id=manufacturer.m_pnode).m_name,
-                manufacturer.producing_period,
-                this_manu.addr
             )
     return line_dic, loc_dic
 
@@ -185,28 +173,19 @@ def iframe(request, u_id, p_id, m_id):
         this_manu = Manufacturer.objects.get(m_id=manufacturer.m_id)
         if manufacturer.m_pnode == 0:
             info = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Direct get from product constructor",
-                manufacturer.producing_period,
-                this_manu.addr
             )
         else:
             info = Manus(
-                this_manu.m_name,
-                this_manu.loc,
-                manufacturer.status,
-                manufacturer.add_time,
-                manufacturer.modify_time,
-                manufacturer.modify_log,
+                this_manu,
+                manufacturer,
                 "Get from %s" % Manufacturer.objects.get(m_id=manufacturer.m_pnode).m_name,
-                manufacturer.producing_period,
-                this_manu.addr
             )
+        location_country = this_manu.addr.split(',')[-1]
+        location_city = this_manu.addr.split(',')[-3]
+        loca = location_country + ', ' + location_city
         context = {
             'u_id': u_id,
             'p_id': p_id,
@@ -216,6 +195,7 @@ def iframe(request, u_id, p_id, m_id):
             'name': hi_name,
             'status_feedback': status_feedback,
             'feedback_dic': feedback_dic,
+            'loca': loca,
         }
     except Exception as err:
         print('***************')
@@ -319,7 +299,6 @@ def insert_new_product(request, u_id):
         new_product.p_name = p_name
         new_product.description = p_description
         new_product.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_product.modifytime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_product.u_status = 0
         if len(msg) == 0:
             new_product.save()
@@ -554,10 +533,10 @@ def insert_pmmapping_new(request, u_id, p_id, m_id, m_pnode):
     return redirect(reverse('mU_p_view2', kwargs={'u_id': u_id, 'p_id': p_id}))
 
 
-def pm_delete(request, u_id=0, p_id=0, id=0):
+def pm_delete(request, u_id=0, p_id=0, pm_id=0):
     user_hi = User.objects.get(u_id=u_id)
     hi_name = user_hi.u_name.split('/')[0]
-    del_pm = PMmapping.objects.get(id=id)
+    del_pm = PMmapping.objects.get(id=pm_id)
     manu = Manufacturer.objects.get(m_id=del_pm.m_id)
     try:
         del_pm.status = 1
@@ -581,10 +560,44 @@ def pm_delete(request, u_id=0, p_id=0, id=0):
     return render(request, 'user/products/delete.html', context)
 
 
-def pm_recovery(request, u_id=0, p_id=0, id=0):
+def right_update(request, u_id=0, p_id=0, pm_id=0):
     user_hi = User.objects.get(u_id=u_id)
     hi_name = user_hi.u_name.split('/')[0]
-    rec_pm = PMmapping.objects.get(id=id)
+    update_pm = PMmapping.objects.get(id=pm_id)
+    manu = Manufacturer.objects.get(m_id=update_pm.m_id)
+    print(pm_id)
+    context = {'u_id': u_id,
+               'p_id': p_id,
+               'pm_id': pm_id,
+               'name': hi_name,
+               'm_name': manu.m_name,
+               }
+    return render(request, 'user/products/right_change.html', context)
+
+
+def right_updated(request, u_id=0, p_id=0, pm_id=0):
+    update_pm = PMmapping.objects.get(id=pm_id)
+    try:
+        access_right = 0
+        if request.POST.get("Read-only") is not None:
+            access_right += int(request.POST.get("Read-only"))
+        if request.POST.get("Write-only") is not None:
+            access_right += int(request.POST.get("Write-only"))
+        if request.POST.get("Distribute-only") is not None:
+            access_right += int(request.POST.get("Distribute-only"))
+        print(access_right, p_id, pm_id)
+        update_pm.access_right = access_right
+        update_pm.save()
+    except Exception as err:
+        print('***************')
+        print(err)
+    return redirect(reverse('mU_p_edit', kwargs={'u_id': u_id, 'p_id': p_id}))
+
+
+def pm_recovery(request, u_id=0, p_id=0, pm_id=0):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
+    rec_pm = PMmapping.objects.get(id=pm_id)
     manu = Manufacturer.objects.get(m_id=rec_pm.m_id)
     try:
         rec_pm.status = 0

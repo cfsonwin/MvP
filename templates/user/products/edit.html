@@ -79,7 +79,7 @@ product edit
               <thead>
                 <tr style="font-size:.5rem">
                   <th>Name</th>
-                  <th>Info</th>
+                  <th>Access right</th>
                   <th>Add Time</th>
                   <th>Options</th>
                 </tr>
@@ -89,33 +89,60 @@ product edit
               {% if Manu.status == 0 %}
                 <tr class="text-center" style="font-size:.75rem">
                   <td>{{ Manu.name }}</td>
-                  <td>{{ Manu.description }}</td>
+                  <td>
+                      <div class="container">
+                        <div class="row row-cols-2">
+                        <div class="col">{{ Manu.m_right }}</div>
+                        <div class="col text-right">
+                            <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_right_update' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">update</a>
+                        </div>
+                        </div>
+                      </div>
+                  </td>
                   <td>{{ Manu.addtime }}</td>
                   <td>
                     <div class="d-flex" >
-                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Delete</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">Delete</a>
                     </div>
                   </td>
                 </tr>
               {% elif Manu.status == 4 %}
                 <tr class="text-center" style="font-size:.75rem">
                   <td>{{ Manu.name }}</td>
-                  <td>{{ Manu.description }}</td>
+                  <td>
+                      <div class="container">
+                        <div class="row row-cols-2">
+                        <div class="col">{{ Manu.m_right }}</div>
+                        <div class="col text-right">
+                            <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_right_update' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">update</a>
+                        </div>
+                        </div>
+                      </div>
+                  </td>
                   <td>{{ Manu.addtime }}</td>
                   <td>
                     <div class="d-flex" >
-                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Delete</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_delete' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">Delete</a>
                     </div>
                   </td>
                 </tr>
               {% elif Manu.status == 1 %}
                 <tr class="text-center" style="color:#dc3545;font-size:.75rem">
                   <td>{{ Manu.name }}</td>
-                  <td>{{ Manu.description }}</td>
+                  <td>
+                      <div class="container">
+                        <div class="row row-cols-2">
+                        <div class="col">{{ Manu.m_right }}</div>
+                        <div class="col text-right">
+                            <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_right_update' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">update</a>
+                        </div>
+                        </div>
+                      </div>
+                  </td>
                   <td>{{ Manu.addtime }}</td>
                   <td>
                     <div class="d-flex" >
-                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_recovery' u_id p_id key %}" style="color:#212529;font-size:0.5rem">Recovery</a>
+                      <a class=" btn btn-outline-danger btn-sm mr-2" href="{% url 'mU_p_recovery' u_id p_id Manu.pm_id %}" style="color:#212529;font-size:0.5rem">Recovery</a>
                     </div>
                   </td>
                 </tr>
