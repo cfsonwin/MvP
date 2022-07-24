@@ -5,6 +5,7 @@ from datetime import datetime
 import numpy as np
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from geopy import Nominatim
 
 from Admin.models import User, CPmapping, Product, PMmapping, Manufacturer
 from Admin.utils import pw_hash_salt
@@ -26,6 +27,8 @@ def reply_form(request, u_id, pm_id):
     """
     Direct to the webpage for add a reply
     """
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     pm_record = PMmapping.objects.get(id=pm_id)
     m = Manufacturer.objects.get(m_id=pm_record.m_id)
     user = User.objects.get(u_id=u_id)
@@ -34,12 +37,15 @@ def reply_form(request, u_id, pm_id):
         'pm_id': pm_id,
         'm_name': m_name,
         'user': user,
+        'name': hi_name,
     }
 
     return render(request, 'user/add_reply.html', context)
 
 
 def mU_reply_insert(request, u_id, pm_id):
+    user_hi = User.objects.get(u_id=u_id)
+    hi_name = user_hi.u_name.split('/')[0]
     pm_record = PMmapping.objects.get(id=pm_id)
     reply = request.POST.get('fb_reply')
     print(reply)
@@ -245,13 +251,33 @@ def signup_check(request):
             msg.append('Your password must be 8-20 characters long, contain letters and numbers')
         new_user.u_password = md5.hexdigest()
         new_user.pw_salt = ran_n
-        addr = '%s_%s_%s_%s' % (
-            request.POST['Address'],
-            request.POST['Zip'],
-            request.POST['City'],
-            request.POST['State']
-        )
-        new_user.addr = addr
+        if request.POST['select_method'] == "AddManually":
+            addr = '%s, %s, %s, %s' % (
+                request.POST['Address'],
+                request.POST['Zip'],
+                request.POST['City'],
+                request.POST['State']
+            )
+            new_user.addr = addr
+            loc = '%s,%s' % (
+                request.POST['lat'],
+                request.POST['lon']
+            )
+            new_user.loc = loc
+        elif request.POST['select_method'] == "SelectFromMap":
+            geolocator = Nominatim(user_agent="get_location")
+            latitude = request.POST['lat_fm']
+            longitude = request.POST['lon_fm']
+            loc = '%s,%s' % (
+                latitude,
+                longitude
+            )
+            new_user.loc = loc
+            location = geolocator.reverse((latitude, longitude))
+            addr = location.address
+            new_user.addr = addr
+        else:
+            msg.append('Error occurred by getting location')
         new_user.addtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_user.u_status = 0
         if len(msg) == 0:

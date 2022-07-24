@@ -121,14 +121,23 @@ product view
 </a>
 
 
-<div class="container-fluid my-3">
-    <div id="mapid" style="width: 600px; height: 400px; position: relative;" class="my-3"></div>
+<div class="container-fluid my-3" id="f_map">
+    <div id="mapid" style="height: 600px; position: relative;" class="my-3"></div>
 </div>
 </div>
 {% endblock page_view %}
 
 {% block jsbd %}
 <script>
+  window.onload = function () {
+      changeDivHeight();
+  }
+  window.onresize = function () {
+      changeDivHeight();
+  }
+
+
+
   var mymap = L.map('mapid').setView([{{ lat }}, {{ lon }}], {{ zoom_index }});
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2ZzZ2VudCIsImEiOiJjbDFwN2N0bWQwcWxzM2JwZ3BncDdpM3JlIn0.6WZHljjw5-YB2ELfb_VW1Q', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -141,26 +150,26 @@ product view
   var blueIcon = new L.Icon({
 	iconUrl: "{% static 'image/marker-icon-blue.png' %}",
 	shadowUrl: "{% static 'image/marker-shadow.png' %}",
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
+	iconSize: [20, 30],
+	iconAnchor: [10, 30],
 	popupAnchor: [1, -34],
-	shadowSize: [41, 41]
+	shadowSize: [30, 30]
   });
   var redIcon = new L.Icon({
 	iconUrl: "{% static 'image/marker-icon-red.png' %}",
 	shadowUrl: "{% static 'image/marker-shadow.png' %}",
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
+	iconSize: [20, 30],
+	iconAnchor: [10, 30],
 	popupAnchor: [1, -34],
-	shadowSize: [41, 41]
+	shadowSize: [30, 30]
   });
   var yellowIcon = new L.Icon({
 	iconUrl: "{% static 'image/marker-icon-yellow.png' %}",
 	shadowUrl: "{% static 'image/marker-shadow.png' %}",
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
+	iconSize: [20, 30],
+	iconAnchor: [10, 30],
 	popupAnchor: [1, -34],
-	shadowSize: [41, 41]
+	shadowSize: [30, 30]
   });
   {% for key,Manu in loc_dic.items %}
     var marker_{{ key }} = new L.marker([{{Manu.lat}}, {{Manu.lon}}], {icon: blueIcon}).addTo(mymap);
@@ -247,6 +256,11 @@ product view
         ]
     }).addTo(mymap);
   {% endfor %}
+  function changeDivHeight() {
+    var f_map =  document.getElementById("f_map");
+    document.getElementById("mapid").style.width = f_map.offsetWidth;
+    mymap.invalidateSize(true);
+}
 </script>
 {% endblock jsbd %}
 

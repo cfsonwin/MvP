@@ -93,11 +93,9 @@ def signup_check(request):
     try:
         msg = []
         new_manu = Manufacturer()
-
         new_manu.m_name = request.POST['m_name']
         if len(Manufacturer.objects.filter(contact=request.POST['m_email'])) != 0:
             msg.append('This Email address is not available')
-
         new_manu.contact = request.POST['m_email']
         new_manu.description = request.POST['m_description']
         md5 = hashlib.md5()

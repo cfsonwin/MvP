@@ -159,4 +159,4 @@ if __name__ == '__main__':
     #     md5.update(new_pass.encode('utf-8'))
     #     print(md5.hexdigest())
     # i += 1
-    print(get_search_id("test product 0411", "2022-04-10 18:49:26"))
+    print(get_search_id("vProduct_7", "2022-04-10 18:49:26"))

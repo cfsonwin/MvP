@@ -15,6 +15,10 @@ def index(request):
 
 
 def do_signin(request):
+    """
+    receive Email and password from frontend and validate the information.
+    If matched, go to the homepage and add login infomation to sessions.
+    """
     try:
         Ad = Administrator.objects.get(Email=request.POST['inputEmail'])
         if Ad.u_status != 0:
@@ -40,22 +44,32 @@ def do_signin(request):
 
 
 def signin_form(request):
-    print(request.session.get('already_login_user'))
-    print(request.session.get('already_login_ad'))
-    print(request.session.get('already_login_manu'))
+    """
+    Render the webpage for Login.
+    """
     return render(request, 'admin/admin_signin.html')
 
 
 def sign_out(request):
+    """
+    Back to Login page and clear Login information stored in session.
+    """
     request.session.clear()
     return redirect(reverse('mAD_signin'))
 
 
 def signup(request):
+    """
+    Render the webpage for new registration.
+    """
     return render(request, 'admin/admin_signup.html')
 
 
 def signup_check(request):
+    """
+    Receive sign-up form and validation.
+    If valid, give a feedback and generate a new record in database.
+    """
     try:
         msg = []
         new_Admin = Administrator()

@@ -17,8 +17,7 @@ class UserLoginMiddleware:
         if re.match(r'^/uid', request.path):
             print(request.path)
             u_id = request.path.split('/')[1].split('?')[-1]
-            if (int(u_id) not in request.session.get('already_login_user')['u_id']) or request.session.get(
-                    'already_login_user') == None:
+            if request.session.get('already_login_user') == None or (int(u_id) not in request.session.get('already_login_user')['u_id']):
                 print("%s not in list: " % u_id, request.session.get('already_login_user')['u_id'])
                 return redirect(reverse('mU_signin'))
             if 'already_login_user' not in request.session:
